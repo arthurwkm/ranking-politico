@@ -142,7 +142,11 @@ async function detalhe(cargo, id) {
   const classificadas = new Map((await carregarPautas()).pautas.filter(x => x.casa === (cargo === 'Senador' ? 'Senado' : 'Câmara')).map(x => [x.id, x]));
   if (location.hash !== hash) return;  // o usuário já navegou para outra página
   if (!det) { $('#app').innerHTML = `<p>Não foi possível carregar os detalhes. <a href="#/${encodeURIComponent(cargo)}">← ${esc(cargo)}</a></p>`; return; }
-  const w = DATA.pesos;
+  // critérios sem dado (ex.: comissões no Senado) saem da conta; os pesos restantes são reescalados
+  const indices = { presenca: p.taxa_presenca, votacoes: p.taxa_votacoes, comissoes: p.taxa_comissoes, leis: p.indice_leis, relatorias: p.indice_relatorias };
+  const somaPesos = Object.entries(indices).reduce((s, [k, v]) => s + (v == null ? 0 : DATA.pesos[k]), 0) || 1;
+  const w = Object.fromEntries(Object.keys(indices).map(k => [k, indices[k] == null ? 0 : DATA.pesos[k] / somaPesos]));
+  const legislatura = `desde ${dataBR(DATA.inicio_legislatura)}`;
   const linha = (nome, bruto, taxa, peso) =>
     `<tr><td>${nome}</td><td class="n">${bruto}</td><td class="n">${pct(taxa)}</td><td class="n">${(peso * 100).toFixed(0)}%</td><td class="n">${taxa == null ? '—' : (100 * peso * taxa).toFixed(1)}</td></tr>`;
   const pautasAuto = new Set(det.autobeneficio.map(a => a.pauta.split(' ').slice(0, 2).join(' ')));
@@ -166,11 +170,20 @@ async function detalhe(cargo, id) {
       <tbody>
         ${linha('Presença em sessões', `${p.presencas} de ${p.sessoes} (${p.sessoes - p.presencas} faltas)`, p.taxa_presenca, w.presenca)}
         ${linha('Votações nominais', `${p.votos} de ${p.votacoes}`, p.taxa_votacoes, w.votacoes)}
+        ${p.reunioes_comissao == null ? `<tr><td>Presença em comissões</td><td class="n muted" colspan="4">${cargo === 'Senador' ? 'O Senado não publica presença em comissões em formato aberto' : 'Não é membro titular de comissão'}</td></tr>`
+          : linha('Presença em comissões', `${p.presencas_comissao} de ${p.reunioes_comissao} reuniões`, p.taxa_comissoes, w.comissoes)}
+        ${linha(`Leis aprovadas como 1º autor (${legislatura})`, p.leis, p.indice_leis, w.leis)}
+        ${linha(`Relatorias de projetos (${legislatura})`, p.relatorias, p.indice_relatorias, w.relatorias)}
         <tr><td>Votos em autobenefício</td><td class="n">${p.autobeneficio_sim} "Sim" de ${p.autobeneficio_total} pautas</td><td></td><td></td>
           <td class="n ${p.penalidade ? 'bad' : ''}">${p.penalidade == null ? '—' : '−' + p.penalidade.toFixed(1)}</td></tr>
       </tbody>
       <tfoot><tr><th colspan="4">Total</th><th class="n">${nota(p.nota)}</th></tr></tfoot>
     </table></div>
+    <p class="muted">Presença e votações: ${DATA.ano}. Comissões: reuniões deliberativas dos órgãos em que é membro titular.
+      Leis e relatorias: o índice é o percentil entre os colegas de cargo (fração com menos), para não premiar volume extremo.
+      ${cargo === 'Deputado Federal' ? 'Relatorias na Câmara: relator atual de proposições da legislatura (a Câmara não publica o histórico de designações).' : 'Relatorias no Senado: designações como relator em projetos.'}</p>
+    ${det.leis?.length ? `<details><summary>Leis aprovadas (${det.leis.length})</summary><ul>${det.leis.map(l =>
+      `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.proposicao)}</a> <span class="muted">${esc(l.ementa)}</span></li>`).join('')}</ul></details>` : ''}
 
     <h3>Posição nas votações (2023–${DATA.ano}): ${esc(p.posicao_nome)}</h3>
     <p class="muted">Calculada pelos votos em pautas classificadas (veja a metodologia na aba Resumo). Cada eixo vai de −10 a +10;

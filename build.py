@@ -2,18 +2,23 @@
 
 Uso: python3 build.py [ano]   (padrão: ano atual)
 """
-import csv, http.client, io, json, os, sys, time, unicodedata, urllib.request, zipfile
+import bisect, csv, http.client, io, json, os, sys, time, unicodedata, urllib.request, zipfile
 from collections import defaultdict
 from datetime import date, datetime
 
 ANO = int(sys.argv[1]) if len(sys.argv) > 1 else date.today().year
-PESOS = {"presenca": 0.5, "votacoes": 0.5}
+# Critérios sem dado para alguém (ex.: o Senado não publica presença em comissões) saem da conta e os pesos restantes
+# são reescalados para somar 100%.
+PESOS = {"presenca": 0.35, "votacoes": 0.35, "comissoes": 0.1, "leis": 0.1, "relatorias": 0.1}
+INICIO_LEGISLATURA = "2023-02-01"  # leis e relatorias contam a legislatura inteira (são raras demais num ano só)
+TIPOS_PROJETO = {"PL", "PLS", "PLC", "PLP", "PLN", "PLV", "PEC", "PDL", "PDS", "MPV", "PRS", "PRC"}
 CAMARA_API = "https://dadosabertos.camara.leg.br/api/v2"
 CAMARA_ARQ = "https://dadosabertos.camara.leg.br/arquivos"
 SENADO = "https://legis.senado.leg.br/dadosabertos"
 # Códigos de voto do Senado que indicam presença no plenário / voto registrado
 SEN_VOTOU = {"Sim", "Não", "Abstenção", "Votou", "Presidente (art. 51 RISF)"}
 SEN_PRESENTE = SEN_VOTOU | {"P-NRV", "Obstrução"}
+csv.field_size_limit(10 ** 8)  # ementas longas nos CSVs de proposições
 ULTIMOS = 15  # quantos gastos / votações recentes mostrar no detalhe
 
 # Votações em que o parlamentar legisla em benefício próprio ou da classe política.
@@ -57,21 +62,27 @@ EXTREMO = 7  # a partir daqui, "Extrema-esquerda" / "Extrema-direita"
 AUT_NOMES = ("libertária", "moderadamente libertária", "moderadamente autoritária", "autoritária")
 
 
-def baixar(url, tentativas=3, accept="*/*"):
-    """Baixa o corpo inteiro; repete se a conexão cair ou vier menor que o Content-Length."""
-    req = urllib.request.Request(url, headers={"Accept": accept})
+def baixar(url, tentativas=8, accept="*/*"):
+    """Baixa o corpo inteiro; se a conexão cair no meio, retoma do ponto de parada (Range)."""
+    corpo, total = b"", None
     for t in range(tentativas):
+        cab = {"Accept": accept, **({"Range": f"bytes={len(corpo)}-"} if corpo else {})}
         try:
-            with urllib.request.urlopen(req, timeout=600) as r:
-                corpo = r.read()
-                esperado = r.headers.get("Content-Length")
-            if esperado and len(corpo) != int(esperado):
-                raise http.client.IncompleteRead(corpo)
-            return corpo
+            with urllib.request.urlopen(urllib.request.Request(url, headers=cab), timeout=600) as r:
+                if corpo and r.status != 206:
+                    corpo = b""  # servidor ignorou o Range: recomeça
+                total = total or (int(r.headers["Content-Length"]) + len(corpo) if r.headers.get("Content-Length") else None)
+                try:
+                    corpo += r.read()
+                except http.client.IncompleteRead as e:
+                    corpo += e.partial
+            if total is None or len(corpo) == total:
+                return corpo
         except (OSError, http.client.HTTPException):
             if t == tentativas - 1:
                 raise
-            time.sleep(2 ** t)
+        time.sleep(2 ** min(t, 4))
+    raise http.client.IncompleteRead(corpo, total and total - len(corpo))
 
 
 def get_json(url):
@@ -234,15 +245,53 @@ def resumo_gastos(gastos):
 def deputados_federais():
     deps = get_json(f"{CAMARA_API}/deputados?itens=1000")["dados"]
 
-    sessoes = {e["id"] for e in get_csv(f"eventos/csv/eventos-{ANO}.csv")
+    eventos = list(get_csv(f"eventos/csv/eventos-{ANO}.csv"))
+    sessoes = {e["id"] for e in eventos
                if e["descricaoTipo"] == "Sessão Deliberativa"
                and e["localCamara.nome"] == "Plenário da Câmara dos Deputados"
                and e["situacao"].startswith("Encerrada")}
-    presencas = defaultdict(set)
+    reunioes = {e["id"]: e["dataHoraInicio"][:10] for e in eventos
+                if e["descricaoTipo"] in ("Reunião Deliberativa", "Audiência Pública e Deliberação")
+                and e["situacao"].startswith("Encerrada")}
+    presencas, presencas_com = defaultdict(set), defaultdict(set)
     for p in get_csv(f"eventosPresencaDeputados/csv/eventosPresencaDeputados-{ANO}.csv"):
         if p["idEvento"] in sessoes:
             presencas[p["idDeputado"]].add(p["idEvento"])
+        elif p["idEvento"] in reunioes:
+            presencas_com[p["idDeputado"]].add(p["idEvento"])
     sessoes = set().union(*presencas.values())  # descarta sessões do Congresso sem lista de presença
+
+    # Comissões: reuniões deliberativas dos órgãos em que o deputado era membro (titular ou cargo, não suplente) na data.
+    com_lista = set().union(*presencas_com.values())  # só reuniões com lista de presença publicada
+    reunioes_orgao = defaultdict(set)
+    for x in get_csv(f"eventosOrgaos/csv/eventosOrgaos-{ANO}.csv"):
+        if x["idEvento"] in com_lista:
+            reunioes_orgao[x["idOrgao"]].add(x["idEvento"])
+    devidas = defaultdict(set)
+    for m in get_csv("orgaosDeputados/csv/orgaosDeputados-L57.csv"):
+        if m["cargo"] != "Suplente":
+            dep = m["uriDeputado"].rsplit("/", 1)[1]
+            devidas[dep] |= {e for e in reunioes_orgao.get(m["uriOrgao"].rsplit("/", 1)[1], ())
+                             if m["dataInicio"] <= reunioes[e] and (not m["dataFim"] or reunioes[e] <= m["dataFim"])}
+
+    # Leis: proposições da legislatura que viraram norma jurídica, com o deputado como primeiro autor.
+    # ponytail: relatoria = relator atual (último status) de proposições da legislatura; a Câmara não publica o
+    # histórico de designações em arquivo aberto (só nas tramitações, uma chamada por proposição).
+    normas, relatorias = {}, defaultdict(set)
+    anos_leg = range(int(INICIO_LEGISLATURA[:4]), ANO + 1)
+    for ano in anos_leg:
+        for p in get_csv(f"proposicoes/csv/proposicoes-{ano}.csv"):
+            if p["siglaTipo"] in TIPOS_PROJETO:
+                if p["ultimoStatus_descricaoSituacao"] == "Transformado em Norma Jurídica":
+                    normas[p["id"]] = {"proposicao": f"{p['siglaTipo']} {p['numero']}/{p['ano']}", "ementa": p["ementa"],
+                                       "url": f"https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao={p['id']}"}
+                if p["ultimoStatus_uriRelator"]:
+                    relatorias[p["ultimoStatus_uriRelator"].rsplit("/", 1)[1]].add(p["id"])
+    leis = defaultdict(list)
+    for ano in anos_leg:
+        for a in get_csv(f"proposicoesAutores/csv/proposicoesAutores-{ano}.csv"):
+            if a["idProposicao"] in normas and a["ordemAssinatura"] == "1" and a["idDeputadoAutor"]:
+                leis[a["idDeputadoAutor"]].append(normas[a["idProposicao"]])
 
     plen = {v["id"]: v["descricao"] for v in get_csv(f"votacoes/csv/votacoes-{ANO}.csv") if v["siglaOrgao"] == "PLEN"}
     prop_votacao = {}
@@ -289,6 +338,8 @@ def deputados_federais():
             "url": f"https://www.camara.leg.br/deputados/{i}",
             "presencas": len(presencas[i]), "sessoes": len(sessoes),
             "votos": votos[i], "votacoes": len(votacoes_nominais),
+            "presencas_comissao": len(presencas_com[i] & devidas[i]), "reunioes_comissao": len(devidas[i]),
+            "leis": len(leis[i]), "relatorias": len(relatorias[i]),
             "autobeneficio_sim": sum(a["voto"] == "Sim" for a in autobeneficio[i]),
             "autobeneficio_total": len(AUTOBENEFICIO_CAMARA),
             **posicao(votos_class[i]),
@@ -297,6 +348,7 @@ def deputados_federais():
                 "gastos": resumo_gastos(gastos[i]),
                 "ultimas_votacoes": sorted(historico[i], key=lambda v: v["data"], reverse=True)[:ULTIMOS],
                 "autobeneficio": autobeneficio[i],
+                "leis": leis[i],
             },
         })
     return out
@@ -340,6 +392,14 @@ def senadores():
                 voto = {**info, "voto": x["siglaVotoParlamentar"]}
                 votos_class[str(x["codigoParlamentar"])].append({**voto, "bonus": bonus_minoria(voto) if voto["voto"] in VOTO_VALOR else 1})
 
+    print("baixando relatorias do Senado", file=sys.stderr)
+    relatorias = defaultdict(set)
+    for ano in range(int(INICIO_LEGISLATURA[:4]), ANO + 1):
+        for r in get_json(f"{SENADO}/processo/relatoria?dataInicio={ano}-01-01&dataFim={ano}-12-31"):
+            if (r["descricaoTipoRelator"] == "Relator" and r["dataDesignacao"] >= INICIO_LEGISLATURA
+                    and r["identificacaoProcesso"].split()[0] in TIPOS_PROJETO):
+                relatorias[str(r["codigoParlamentar"])].add(r["idProcesso"])
+
     print("baixando cota parlamentar do Senado", file=sys.stderr)
     gastos = defaultdict(list)  # chave: nome normalizado (o CSV do Senado não traz o código)
     linhas = io.StringIO(baixar(f"https://www.senado.leg.br/transparencia/LAI/verba/despesa_ceaps_{ANO}.csv").decode("latin-1"))
@@ -354,6 +414,13 @@ def senadores():
         i = p["IdentificacaoParlamentar"]
         cod = i["CodigoParlamentar"]
         completo = set(norm(i["NomeCompletoParlamentar"]).split())
+        # Leis: processos da legislatura que viraram norma jurídica, com o senador como primeiro autor.
+        leis = [{"proposicao": x["identificacao"], "ementa": x.get("ementa") or "",
+                 "url": f"https://www25.senado.leg.br/web/atividade/materias/-/materia/{x['codigoMateria']}"}
+                for x in get_json(f"{SENADO}/processo?codigoParlamentarAutor={cod}")
+                if x["dataApresentacao"] >= INICIO_LEGISLATURA and x["identificacao"].split()[0] in TIPOS_PROJETO
+                and (x.get("situacaoAtual") or "").startswith("TRANSFORMADA EM NORMA JURÍDICA")
+                and norm(i["NomeParlamentar"]) in norm(x.get("autoria") or "").split(",")[0]]
         nome_gasto = next((n for n in gastos if n == norm(i["NomeParlamentar"]) or set(n.split()) <= completo), None)
         out.append({
             "id": cod, "nome": i["NomeParlamentar"], "partido": i.get("SiglaPartidoParlamentar", ""),
@@ -363,6 +430,9 @@ def senadores():
             # o Senado não publica lista de presença por sessão em formato aberto.
             "presencas": len(presentes[cod]), "sessoes": len(sessoes[cod]),
             "votos": votos[cod], "votacoes": total_vot[cod],
+            # o Senado não publica presença por reunião de comissão em formato aberto (só atas em PDF)
+            "presencas_comissao": None, "reunioes_comissao": None,
+            "leis": len(leis), "relatorias": len(relatorias[cod]),
             "autobeneficio_sim": sum(a["voto"] == "Sim" for a in autobeneficio[cod]),
             "autobeneficio_total": len(AUTOBENEFICIO_SENADO),
             **posicao(votos_class[cod]),
@@ -371,6 +441,7 @@ def senadores():
                 "gastos": resumo_gastos(gastos.get(nome_gasto, [])),
                 "ultimas_votacoes": sorted(historico[cod], key=lambda v: v["data"], reverse=True)[:ULTIMOS],
                 "autobeneficio": autobeneficio[cod],
+                "leis": leis,
             },
         })
     return out
@@ -379,18 +450,26 @@ def senadores():
 def pontuar(politicos):
     sem_dados = [p for p in politicos if not p["sessoes"] or not p["votacoes"]]
     ativos = [p for p in politicos if p["sessoes"] and p["votacoes"]]
+    # leis e relatorias: percentil entre os colegas de cargo (fração com menos; resiste a outliers como o presidente da casa)
+    ordem = {k: sorted(p[k] for p in ativos) for k in ("leis", "relatorias")}
     for p in ativos:
         p["taxa_presenca"] = p["presencas"] / p["sessoes"]
         p["taxa_votacoes"] = p["votos"] / p["votacoes"]
-        # percentil: fração dos colegas de cargo com menos proposições (resiste a outliers)
+        p["taxa_comissoes"] = p["presencas_comissao"] / p["reunioes_comissao"] if p["reunioes_comissao"] else None
+        for k, o in ordem.items():
+            p["indice_" + k] = bisect.bisect_left(o, p[k]) / max(len(o) - 1, 1)
+        indices = {"presenca": p["taxa_presenca"], "votacoes": p["taxa_votacoes"], "comissoes": p["taxa_comissoes"],
+                   "leis": p["indice_leis"], "relatorias": p["indice_relatorias"]}
+        usados = {k: v for k, v in indices.items() if v is not None}
         p["penalidade"] = round(PENALIDADE_AUTOBENEFICIO * p["autobeneficio_sim"] / max(p["autobeneficio_total"], 1), 1)
-        p["nota"] = round(max(0, 100 * (PESOS["presenca"] * p["taxa_presenca"]
-                                        + PESOS["votacoes"] * p["taxa_votacoes"]) - p["penalidade"]), 1)
+        p["nota"] = round(max(0, 100 * sum(PESOS[k] * v for k, v in usados.items()) / sum(PESOS[k] for k in usados)
+                              - p["penalidade"]), 1)
     ativos.sort(key=lambda p: -p["nota"])
     for pos, p in enumerate(ativos, 1):
         p["posicao"] = pos
     for p in sem_dados:
-        p.update(taxa_presenca=None, taxa_votacoes=None, penalidade=None, nota=None, posicao=None)
+        p.update(taxa_presenca=None, taxa_votacoes=None, taxa_comissoes=None, indice_leis=None, indice_relatorias=None,
+                 penalidade=None, nota=None, posicao=None)
     return ativos + sem_dados
 
 
@@ -415,12 +494,17 @@ def escrever_pautas():
 
 
 def _teste():
-    base = dict(sessoes=10, votacoes=10, autobeneficio_sim=0, autobeneficio_total=4)
-    r = pontuar([dict(base, presencas=10, votos=10), dict(base, presencas=5, votos=5),
-                 dict(base, presencas=10, votos=10, autobeneficio_sim=2),
+    base = dict(sessoes=10, votacoes=10, autobeneficio_sim=0, autobeneficio_total=4,
+                presencas_comissao=None, reunioes_comissao=None, leis=0, relatorias=0)
+    r = pontuar([dict(base, presencas=10, votos=10, leis=3, relatorias=9), dict(base, presencas=5, votos=5, leis=1, relatorias=9),
+                 dict(base, presencas=10, votos=10, autobeneficio_sim=2, relatorias=1),
                  dict(base, sessoes=0, votacoes=0, presencas=0, votos=0)])
-    assert [p["nota"] for p in r] == [100.0, 90.0, 50.0, None], r
-    assert r[0]["posicao"] == 1 and r[3]["posicao"] is None
+    # sem comissões: pesos 35/35/10/10 de 90. Leis: percentis 1, 0,5, 0; relatorias: 0,5, 0,5, 0
+    assert [p["nota"] for p in r] == [round(100 * (0.7 + 0.1 + 0.05) / 0.9, 1), round(100 * 0.7 / 0.9 - 10, 1),
+                                     round(100 * (0.35 + 0.05 + 0.05) / 0.9, 1), None], r
+    assert r[0]["posicao"] == 1 and r[3]["posicao"] is None and r[1]["indice_relatorias"] == 0
+    c = pontuar([dict(base, presencas=10, votos=10, presencas_comissao=1, reunioes_comissao=4)])[0]
+    assert c["taxa_comissoes"] == 0.25 and c["nota"] == round(100 * (0.7 + 0.025), 1), c
     v = lambda p, q, voto="Sim", **kw: dict(ed_p=p, ed_q=q, aut_p=None, aut_q=None, voto=voto, **kw)
     assert posicao([v(-4, 0)] * 5)["ed"] == -10 and posicao([v(-4, 0, "Não")] * 5)["ed"] == 10
     assert posicao([v(-4, 0)] * 4)["ed"] is None
@@ -472,7 +556,7 @@ if __name__ == "__main__":
             with open(f"detalhes/{norm(cargo).replace(' ', '-').lower()}-{p['id']}.json", "w", encoding="utf-8") as f:
                 json.dump(det, f, ensure_ascii=False)
     with open("data.json", "w", encoding="utf-8") as f:
-        json.dump({"ano": ANO, "pesos": PESOS, "penalidade_autobeneficio": PENALIDADE_AUTOBENEFICIO,
+        json.dump({"ano": ANO, "pesos": PESOS, "inicio_legislatura": INICIO_LEGISLATURA, "penalidade_autobeneficio": PENALIDADE_AUTOBENEFICIO,
                    "min_votos_eixo": MIN_VOTOS_EIXO, "versao_metodologia": 3, "max_bonus_minoria": MAX_BONUS_MINORIA,
                    "limite_consenso": LIMITE_CONSENSO, "ancoras_ed": ANCORAS_ED, "calibracao": calibracao,
                    "categorias_gastos": {c: sorted(([k, round(v, 2)] for k, v in cs.items()), key=lambda x: -x[1])
