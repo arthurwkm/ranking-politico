@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking Político</title>
+<style>
+  :root { --bg: #fff; --fg: #1a1a1a; --muted: #666; --line: #e5e5e5; --hover: #f5f7fa; --accent: #0b5cad;
+    --bad: #b42318; --good: #067647;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #8a8a8a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121212; --fg: #eee; --muted: #999; --line: #2a2a2a; --hover: #1d2228; --accent: #6aa8ff;
+      --bad: #f97066; --good: #47cd89;
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #6b6b6b; }
+  }
+  body { margin: 0 auto; max-width: 960px; padding: 16px; font: 15px/1.5 system-ui, sans-serif; background: var(--bg); color: var(--fg); }
+  a { color: var(--accent); }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+  nav a { padding: 8px 12px; text-decoration: none; border-bottom: 2px solid transparent; }
+  nav a.on { border-color: var(--accent); font-weight: 600; }
+  select { padding: 8px; font: inherit; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; }
+  input { width: 100%; box-sizing: border-box; padding: 8px; margin-bottom: 8px; font: inherit; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  tr[data-id] { cursor: pointer; }
+  tr[data-id]:hover, tr[data-id]:focus { background: var(--hover); outline: none; }
+  img.thumb { width: 40px; height: 52px; object-fit: cover; border-radius: 4px; vertical-align: middle; }
+  .muted { color: var(--muted); }
+  .perfil { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .perfil img { width: 140px; border-radius: 8px; }
+  h3 { margin-top: 32px; }
+  .scroll { overflow-x: auto; }
+  .pizza { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .pizza svg { width: 200px; height: 200px; flex: none; }
+  .pizza circle:hover { opacity: .8; }
+  .pizza table { flex: 1; min-width: 260px; }
+  .cor { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+  .bad { color: var(--bad); font-weight: 600; }
+  .good { color: var(--good); font-weight: 600; }
+  details summary { cursor: pointer; }
+  nav.sub { border: 0; margin: 0 0 8px; }
+  nav.sub a { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; }
+  nav.sub a.on { border-color: var(--accent); }
+  .graficos { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+  .mapa { width: 100%; max-width: 420px; }
+  .mapa text { fill: var(--muted); font-size: 9px; }
+  .mapa .grade { stroke: var(--line); }
+  .mapa .eixo { stroke: var(--muted); }
+  .mapa circle { stroke: var(--bg); stroke-width: .8; }
+  .mapa a circle:hover { r: 5; }
+  .mapa .foco { fill: var(--bad); r: 6; stroke-width: 2; }
+  table.grade16 { width: 100%; table-layout: fixed; min-width: 420px; }
+  .graficos > .mapa { flex: 0 1 380px; }
+  table.grade16 td { width: 16.6%; height: 56px; text-align: center; font-size: 11px; line-height: 1.25; border: 2px solid var(--bg);
+    padding: 4px 2px; hyphens: auto; overflow-wrap: anywhere; }
+  table.grade16 td b { display: block; font-size: 16px; }
+  table.grade16 th { font-size: 12px; font-weight: 500; color: var(--muted); text-align: center; }
+  .kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+  .kpi { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; min-width: 150px; }
+  .kpi b { display: block; font-size: 22px; }
+</style>
+</head>
+<body>
+<h1>Ranking Político</h1>
+<main id="app">Carregando…</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+const pct = x => x == null ? '—' : (100 * x).toFixed(1) + '%';
+const nota = x => x == null ? '—' : x.toFixed(1);
+const brl = x => x.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const dataBR = d => d ? d.split('-').reverse().join('/') : '—';
+const slug = c => c.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/ /g, '-');
+const ED = ['Esquerda', 'Centro-esquerda', 'Centro-direita', 'Direita'];
+const AUT = ['libertária', 'moderadamente libertária', 'moderadamente autoritária', 'autoritária'];
+const faixa = x => Math.min(Math.floor((x + 10) / 5), 3);  // escala −10..+10 em faixas de 5
+const eixo = x => x == null ? '—' : (x > 0 ? '+' : '') + x.toFixed(1);
+const temEixo = (p, e) => p?.[e + '_p'] != null && p?.[e + '_q'] != null && p[e + '_p'] !== p[e + '_q'];
+const parPauta = (p, e) => p?.[e + '_p'] == null || p?.[e + '_q'] == null ? 'não classificado'
+  : `Sim ${eixo(p[e + '_p'])} / Não ${eixo(p[e + '_q'])}`;
+let PAUTAS;
+const carregarPautas = async () => PAUTAS ??= await fetch('pautas.json').then(r => r.json()).catch(() => ({ pautas: [], autobeneficio: [] }));
+const nav = atual => `<nav>${['Resumo', 'Pautas', ...Object.keys(DATA.cargos)].map(c =>
+  `<a href="#/${encodeURIComponent(c)}" class="${c === atual ? 'on' : ''}">${esc(c)}</a>`).join('')}</nav>`;
+let DATA;
+
+fetch('data.json').then(r => r.json()).then(d => {
+  DATA = d;
+  if (d.versao_metodologia !== 3) {
+    for (const ps of Object.values(d.cargos)) for (const p of ps) {
+      Object.assign(p, { ed: null, aut: null, n_ed: 0, n_aut: 0, posicao_nome: 'Classificação v3 pendente' });
+    }
+  }
+  route();
+});
+addEventListener('hashchange', route);
+
+function route() {
+  const [cargo, id] = location.hash.slice(2).split('/').map(decodeURIComponent);
+  if (cargo === 'Pautas') return pautas();
+  if (!DATA.cargos[cargo]) return resumo(id);
+  id ? detalhe(cargo, id) : lista(cargo);
+  scrollTo(0, 0);
+}
+
+function lista(cargo) {
+  const ps = DATA.cargos[cargo];
+  $('#app').innerHTML = `
+    ${nav(cargo)}
+    <p class="muted">Dados oficiais de ${DATA.ano} · atualizado em ${esc(DATA.gerado_em)}</p>
+    ${ps.length ? `<input type="search" placeholder="Filtrar por nome, partido ou UF" aria-label="Filtrar">
+    <div class="scroll"><table>
+      <thead><tr><th class="n">#</th><th></th><th>Nome</th><th>Partido/UF</th><th>Posição nas votações</th><th class="n">Nota</th></tr></thead>
+      <tbody>${ps.map(p => `
+        <tr tabindex="0" data-id="${esc(p.id)}" data-q="${esc((p.nome + ' ' + p.partido + ' ' + p.uf).toLowerCase())}">
+          <td class="n">${p.posicao ?? '—'}</td>
+          <td><img class="thumb" loading="lazy" src="${esc(p.foto)}" alt=""></td>
+          <td>${esc(p.nome)}</td>
+          <td>${esc(p.partido)}-${esc(p.uf)}</td>
+          <td>${esc(p.posicao_nome ?? '—')}</td>
+          <td class="n">${nota(p.nota)}</td>
+        </tr>`).join('')}</tbody>
+    </table></div>` : '<p>Ainda não há dados para este cargo.</p>'}`;
+  const tb = $('tbody');
+  if (!tb) return;
+  const abrir = tr => tr && (location.hash = `#/${encodeURIComponent(cargo)}/${encodeURIComponent(tr.dataset.id)}`);
+  tb.onclick = e => abrir(e.target.closest('tr'));
+  tb.onkeydown = e => e.key === 'Enter' && abrir(e.target.closest('tr'));
+  $('input').oninput = e => {
+    const q = e.target.value.toLowerCase();
+    for (const tr of tb.rows) tr.hidden = !tr.dataset.q.includes(q);
+  };
+}
+
+async function detalhe(cargo, id) {
+  const p = DATA.cargos[cargo].find(p => p.id === id);
+  if (!p) { $('#app').innerHTML = '<p>Político não encontrado.</p>'; return; }
+  $('#app').innerHTML = 'Carregando…';
+  const hash = location.hash;
+  const det = await fetch(`detalhes/${slug(cargo)}-${encodeURIComponent(id)}.json`).then(r => r.ok ? r.json() : null).catch(() => null);
+  const classificadas = new Map((await carregarPautas()).pautas.filter(x => x.casa === (cargo === 'Senador' ? 'Senado' : 'Câmara')).map(x => [x.id, x]));
+  if (location.hash !== hash) return;  // o usuário já navegou para outra página
+  if (!det) { $('#app').innerHTML = `<p>Não foi possível carregar os detalhes. <a href="#/${encodeURIComponent(cargo)}">← ${esc(cargo)}</a></p>`; return; }
+  const w = DATA.pesos;
+  const linha = (nome, bruto, taxa, peso) =>
+    `<tr><td>${nome}</td><td class="n">${bruto}</td><td class="n">${pct(taxa)}</td><td class="n">${(peso * 100).toFixed(0)}%</td><td class="n">${taxa == null ? '—' : (100 * peso * taxa).toFixed(1)}</td></tr>`;
+  const pautasAuto = new Set(det.autobeneficio.map(a => a.pauta.split(' ').slice(0, 2).join(' ')));
+  const votoAuto = v => v === 'Sim' ? '<span class="bad">✗ Votou a favor</span>'
+    : v === 'Não' ? '<span class="good">✓ Votou contra</span>' : esc(v);
+  $('#app').innerHTML = `
+    <p><a href="#/${encodeURIComponent(cargo)}">← ${esc(cargo)}</a></p>
+    <div class="perfil">
+      <img src="${esc(p.foto)}" alt="Foto oficial de ${esc(p.nome)}">
+      <div>
+        <h2>${esc(p.nome)}</h2>
+        <p>${esc(cargo)} · ${esc(p.partido)}-${esc(p.uf)}</p>
+        <p>${p.posicao ? `<strong>${p.posicao}º</strong> de ${DATA.cargos[cargo].filter(x => x.posicao).length} · nota <strong>${nota(p.nota)}</strong>` : 'Sem sessões/votações registradas no período (ex.: assumiu recentemente).'}</p>
+        <p><a href="${esc(p.url)}" target="_blank" rel="noopener">Página oficial</a></p>
+      </div>
+    </div>
+
+    <h3>Como a nota foi calculada (${DATA.ano})</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Critério</th><th class="n">Números</th><th class="n">Índice</th><th class="n">Peso</th><th class="n">Pontos</th></tr></thead>
+      <tbody>
+        ${linha('Presença em sessões', `${p.presencas} de ${p.sessoes} (${p.sessoes - p.presencas} faltas)`, p.taxa_presenca, w.presenca)}
+        ${linha('Votações nominais', `${p.votos} de ${p.votacoes}`, p.taxa_votacoes, w.votacoes)}
+        ${linha('Proposições apresentadas', `${p.proposicoes} (percentil no cargo)`, p.indice_proposicoes, w.proposicoes)}
+        <tr><td>Votos em autobenefício</td><td class="n">${p.autobeneficio_sim} "Sim" de ${p.autobeneficio_total} pautas</td><td></td><td></td>
+          <td class="n ${p.penalidade ? 'bad' : ''}">${p.penalidade == null ? '—' : '−' + p.penalidade.toFixed(1)}</td></tr>
+      </tbody>
+      <tfoot><tr><th colspan="4">Total</th><th class="n">${nota(p.nota)}</th></tr></tfoot>
+    </table></div>
+
+    <h3>Posição nas votações (2023–${DATA.ano}): ${esc(p.posicao_nome)}</h3>
+    <p class="muted">Calculada pelos votos em pautas classificadas (veja a metodologia na aba Resumo). Cada eixo vai de −10 a +10;
+      são necessários ao menos ${DATA.min_votos_eixo} votos por eixo.</p>
+    ${p.aut == null && p.ed != null ? faixaED(DATA.cargos[cargo], cargo, p.id, false, true) : ''}
+    <div class="graficos">
+      ${p.aut == null ? '' : mapa(DATA.cargos[cargo], cargo, p.id)}
+      <div class="kpis">
+        <div class="kpi">Esquerda × direita <b>${eixo(p.ed)}</b><span class="muted">${p.n_ed} votos · −10 esquerda / +10 direita</span></div>
+        <div class="kpi">Autoridade <b>${eixo(p.aut)}</b><span class="muted">${p.n_aut} votos · −10 libertário / +10 autoritário</span></div>
+      </div>
+    </div>
+    ${det.votos_classificados.length ? `<details><summary>Ver as ${det.votos_classificados.length} votações classificadas</summary>
+    <div class="scroll"><table>
+      <thead><tr><th>Data</th><th>Proposição</th><th>Proposta / status quo</th><th class="n">Sim × Não</th><th>Voto</th></tr></thead>
+      <tbody>${det.votos_classificados.map(v => `<tr>
+        <td>${dataBR(v.data)}</td>
+        <td><details><summary>${esc(v.proposicao)}</summary>${esc(DATA.versao_metodologia === 3 ? v.justificativa : 'Classificação v3 pendente')}</details></td>
+        <td class="n">esq/dir ${parPauta(v, 'ed')} · aut ${parPauta(v, 'aut')}</td>
+        <td class="n">${v.sim} × ${v.nao}</td>
+        <td>${esc(v.voto)}${DATA.versao_metodologia === 3 && v.bonus > 1 ? ` <span class="good" title="Votou com a minoria: este voto pesa ${v.bonus}× no cálculo">×${v.bonus}</span>` : ''}</td></tr>`).join('')}</tbody>
+    </table></div></details>` : ''}
+
+    <h3>Gastos com a cota parlamentar (${DATA.ano}): ${brl(det.gastos.total)}</h3>
+    ${det.gastos.total ? pizza(det.gastos.categorias) + `
+    <h4>Últimos gastos</h4>
+    <div class="scroll"><table>
+      <thead><tr><th>Data</th><th>Categoria</th><th>Fornecedor</th><th class="n">Valor</th></tr></thead>
+      <tbody>${det.gastos.ultimos.map(g => `<tr>
+        <td>${dataBR(g.data)}</td><td>${esc(g.categoria)}</td><td>${esc(g.fornecedor)}</td>
+        <td class="n">${g.url ? `<a href="${esc(g.url)}" target="_blank" rel="noopener" title="Ver nota fiscal">${brl(g.valor)}</a>` : brl(g.valor)}</td></tr>`).join('')}
+      </tbody>
+    </table></div>` : '<p class="muted">Nenhum gasto registrado no período.</p>'}
+
+    <h3>Pautas de autobenefício (2023–${DATA.ano})</h3>
+    <p class="muted">Votações em que parlamentares legislaram em benefício próprio ou dos partidos. Cada voto "Sim" desconta pontos
+      (até ${DATA.penalidade_autobeneficio} no total). Lista curada, sem critério ideológico.</p>
+    ${det.autobeneficio.length ? `<div class="scroll"><table>
+      <thead><tr><th>Data</th><th>Pauta</th><th>Voto</th></tr></thead>
+      <tbody>${det.autobeneficio.map(a => `<tr><td>${dataBR(a.data)}</td><td>${esc(a.pauta)}</td><td>${votoAuto(a.voto)}</td></tr>`).join('')}</tbody>
+    </table></div>` : '<p class="muted">Não votou em nenhuma dessas pautas (ausente ou fora do mandato na época).</p>'}
+
+    <h3>Últimas votações</h3>
+    ${det.ultimas_votacoes.length ? `<div class="scroll"><table>
+      <thead><tr><th>Data</th><th>Proposição</th><th>Voto</th><th>Classificação</th></tr></thead>
+      <tbody>${det.ultimas_votacoes.map(v => `<tr>
+        <td>${dataBR(v.data)}</td>
+        <td><details><summary>${esc(v.proposicao || 'Votação')}: ${esc(v.descricao.slice(0, 90))}${v.descricao.length > 90 ? '…' : ''}</summary>${esc(v.ementa)}</details></td>
+        <td>${esc(v.voto)}</td>
+        <td>${pautasAuto.has(v.proposicao) ? '<span class="bad">⚠ Autobenefício</span>'
+          : classificadas.has(v.id) ? `esq/dir ${parPauta(classificadas.get(v.id), 'ed')} · aut ${parPauta(classificadas.get(v.id), 'aut')}`
+          : `<span class="muted">${classificadas.has(v.id) ? 'Sem efeito ideológico' : 'Não classificada (procedimento ou destaque)'}</span>`}</td></tr>`).join('')}
+      </tbody>
+    </table></div>` : '<p class="muted">Nenhuma votação nominal no período.</p>'}`;
+}
+
+// Mapa 2D: x = esquerda × direita, y = autoridade (+ em cima), ambos −10..+10. Um ponto por político.
+function mapa(ps, cargo, foco, porCasa) {
+  const S = 300, M = 24, X = x => M + (x + 10) / 20 * S, Y = y => M + (10 - y) / 20 * S;
+  const validos = ps.filter(p => p.ed != null && p.aut != null);
+  const linha = (v, vertical) => `<line class="${v ? 'grade' : 'eixo'}" ${vertical ? `x1="${X(v)}" x2="${X(v)}" y1="${M}" y2="${M + S}"`
+    : `y1="${Y(v)}" y2="${Y(v)}" x1="${M}" x2="${M + S}"`} ${v ? 'stroke-dasharray="3 3"' : ''}/>`;
+  const grade = [-7, -4, 0, 4, 7].map(v => linha(v, true)).join('') + [-5, 0, 5].map(v => linha(v, false)).join('');
+  const pontos = validos.filter(p => p.id !== foco).map(p => {
+    const c = porCasa ? p._cargo : cargo;
+    return `<a href="#/${encodeURIComponent(c)}/${encodeURIComponent(p.id)}"><circle cx="${X(p.ed)}" cy="${Y(p.aut)}" r="3.2"
+      fill="${porCasa && c === 'Senador' ? 'var(--s2)' : 'var(--s1)'}" fill-opacity=".75">
+      <title>${esc(p.nome)} (${esc(p.partido)}-${esc(p.uf)}) · ${esc(p.posicao_nome)} · esq/dir ${eixo(p.ed)}, aut ${eixo(p.aut)}</title></circle></a>`;
+  }).join('');
+  const f = validos.find(p => p.id === foco);
+  return `<svg class="mapa" viewBox="0 0 ${S + 2 * M} ${S + 2 * M}" role="img" aria-label="Mapa de posições políticas">
+    <rect x="${M}" y="${M}" width="${S}" height="${S}" fill="none" class="grade" stroke="var(--line)"/>
+    ${grade}${pontos}
+    ${f ? `<circle class="foco" cx="${X(f.ed)}" cy="${Y(f.aut)}"><title>${esc(f.nome)}</title></circle>` : ''}
+    <text x="${M}" y="${S + 2 * M - 6}">← Esquerda</text>
+    <text x="${M + S}" y="${S + 2 * M - 6}" text-anchor="end">Direita →</text>
+    <text x="${M + S / 2}" y="14" text-anchor="middle">↑ Autoritário</text>
+    <text x="${M + S / 2}" y="${S + M + 12}" text-anchor="middle" dy="0">↓ Libertário</text>
+  </svg>`;
+}
+
+// Faixa 1D esquerda × direita (para quem não tem dados suficientes de autoridade) + contagem por faixa.
+// Mesmos cortes de nome_ed() no build.py; adaptação do survey descrita no codebook.
+const nomeED = x => Math.abs(x) >= 7 ? (x < 0 ? 'Extrema-esquerda' : 'Extrema-direita') : ED[x <= -4 ? 0 : x < 0 ? 1 : x < 4 ? 2 : 3];
+const FAIXAS_ED = ['Extrema-esquerda', 'Esquerda', 'Centro-esquerda', 'Centro-direita', 'Direita', 'Extrema-direita'];
+function faixaED(ps, cargo, foco, porCasa, semContagem) {
+  const W = 600, H = 70, M = 12, X = x => M + (x + 10) / 20 * (W - 2 * M);
+  const validos = ps.filter(p => p.ed != null);
+  const jitter = id => (([...String(id)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 997, 7)) / 997 - 0.5) * 34;
+  const pontos = validos.map(p => {
+    const c = porCasa ? p._cargo : cargo, focado = p.id === foco;
+    return `<a href="#/${encodeURIComponent(c)}/${encodeURIComponent(p.id)}"><circle cx="${X(p.ed)}" cy="${H / 2 + (focado ? 0 : jitter(p.id))}"
+      r="${focado ? 6 : 3.2}" class="${focado ? 'foco' : ''}" fill="${porCasa && c === 'Senador' ? 'var(--s2)' : 'var(--s1)'}" fill-opacity=".75">
+      <title>${esc(p.nome)} (${esc(p.partido)}-${esc(p.uf)}) · ${esc(p.posicao_nome)} · esq/dir ${eixo(p.ed)}</title></circle></a>`;
+  }).join('');
+  const contagem = FAIXAS_ED.map(nome => [nome, validos.filter(p => nomeED(p.ed) === nome).length]);
+  return `<svg class="mapa" style="max-width:100%" viewBox="0 0 ${W} ${H + 16}" role="img" aria-label="Posições no eixo esquerda × direita">
+      ${[-7, -4, 0, 4, 7].map(v => `<line class="${v ? 'grade' : 'eixo'}" x1="${X(v)}" x2="${X(v)}" y1="4" y2="${H - 4}" ${v ? 'stroke-dasharray="3 3"' : ''}/>`).join('')}
+      ${pontos}
+      <text x="${M}" y="${H + 12}">← Esquerda</text><text x="${W - M}" y="${H + 12}" text-anchor="end">Direita →</text>
+    </svg>
+    ${semContagem ? '' : `<div class="kpis">${contagem.map(([n, c]) => `<div class="kpi">${n}<b>${c}</b></div>`).join('')}</div>`}`;
+}
+
+// Grade 6×4 = 24 subquadrantes (6 por quadrante): 3 faixas de cada lado em esquerda × direita, 2 de cada lado em autoridade.
+function grade24(ps) {
+  const validos = ps.filter(p => p.ed != null && p.aut != null);
+  const n = Array.from({ length: 4 }, () => FAIXAS_ED.map(() => 0));
+  validos.forEach(p => n[faixa(p.aut)][FAIXAS_ED.indexOf(nomeED(p.ed))]++);
+  const max = Math.max(1, ...n.flat());
+  return `<div class="scroll" style="flex: 1 1 420px; min-width: 0"><table class="grade16" aria-label="Políticos por subquadrante">
+    <thead><tr>${FAIXAS_ED.map(e => `<th>${e}</th>`).join('')}</tr></thead>
+    <tbody>${[3, 2, 1, 0].map(a => `<tr>${FAIXAS_ED.map((e, i) => `
+      <td style="background: color-mix(in srgb, var(--s1) ${Math.round(70 * n[a][i] / max)}%, transparent)"
+          title="${e} ${AUT[a]}"><b>${n[a][i]}</b>${e} ${AUT[a]}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+async function resumo(aba) {
+  const hash = location.hash;
+  const abas = { 'Brasil': ['Senador', 'Deputado Federal'], 'Senado': ['Senador'], 'Câmara dos Deputados': ['Deputado Federal'] };
+  aba = abas[aba] ? aba : 'Brasil';
+  const ps = abas[aba].flatMap(c => DATA.cargos[c].map(p => ({ ...p, _cargo: c })));
+  const validos = ps.filter(p => p.ed != null && p.aut != null);
+  const media = k => { const v = ps.filter(p => p[k] != null); return v.length ? v.reduce((s, p) => s + p[k], 0) / v.length : null; };
+  const total = ps.reduce((s, p) => s + p.gasto_total, 0);
+  const top = [...ps].sort((a, b) => b.gasto_total - a.gasto_total).slice(0, 10);
+  const linkP = p => `<a href="#/${encodeURIComponent(p._cargo)}/${encodeURIComponent(p.id)}">${esc(p.nome)}</a>`;
+  const casas = abas[aba].map(c => c === 'Senador' ? 'Senado' : 'Câmara');
+  const pts = (await carregarPautas()).pautas.filter(p => casas.includes(p.casa));
+  if (location.hash !== hash) return;
+  const extremos = ps.filter(p => p.ed != null && Math.abs(p.ed) >= 7);
+  $('#app').innerHTML = `
+    ${nav('Resumo')}
+    <nav class="sub">${Object.keys(abas).map(a => `<a href="#/Resumo/${encodeURIComponent(a)}" class="${a === aba ? 'on' : ''}">${esc(a)}</a>`).join('')}</nav>
+
+    <h3>Posições políticas pelos votos (2023–${DATA.ano})</h3>
+    ${DATA.versao_metodologia !== 3 ? '<p>Classificação v3 pendente. As posições serão exibidas após a reclassificação das pautas e a atualização dos dados.</p>' : ''}
+    <div class="kpis">
+      <div class="kpi">Parlamentares posicionados <b>${ps.filter(p => p.ed != null).length}</b><span class="muted">de ${ps.length} (outros: votos insuficientes)</span></div>
+      <div class="kpi">Média esquerda × direita <b>${eixo(media('ed'))}</b><span class="muted">−10 esquerda / +10 direita</span></div>
+      <div class="kpi">Média de autoridade <b>${eixo(media('aut'))}</b><span class="muted">−10 libertário / +10 autoritário</span></div>
+    </div>
+    <h4>Esquerda × direita</h4>
+    ${faixaED(ps, abas[aba][0], null, aba === 'Brasil')}
+    ${validos.length ? `<h4>Mapa com o eixo de autoridade</h4>
+    <div class="graficos">
+      ${mapa(ps, abas[aba][0], null, aba === 'Brasil')}
+      ${grade24(ps)}
+    </div>` : ''}
+    ${ps.length - validos.length > 0 && ps.some(p => p.ed != null && p.aut == null) ? `<p class="muted">${ps.filter(p => p.ed != null && p.aut == null).length}
+      parlamentares aparecem só no eixo esquerda × direita: votaram em menos de ${DATA.min_votos_eixo} pautas de autoridade, o mínimo para posicioná-los no mapa.</p>` : ''}
+    ${aba === 'Brasil' ? '<p><span class="cor" style="background:var(--s1)"></span>Deputados federais <span class="cor" style="background:var(--s2); margin-left:12px"></span>Senadores</p>' : ''}
+
+    ${resumoPautas(pts)}
+
+    <h3>Gastos com a cota parlamentar (${DATA.ano})</h3>
+    <div class="kpis">
+      <div class="kpi">Total <b>${brl(total)}</b></div>
+      <div class="kpi">Média por parlamentar <b>${brl(total / ps.length)}</b></div>
+      ${aba === 'Brasil' ? abas.Brasil.map(c => `<div class="kpi">${c === 'Senador' ? 'Senado' : 'Câmara'}
+        <b>${brl(DATA.cargos[c].reduce((s, p) => s + p.gasto_total, 0))}</b></div>`).join('') : ''}
+    </div>
+    ${aba === 'Brasil' ? '<p class="muted">As categorias de gasto da Câmara e do Senado são diferentes; veja a divisão por categoria nas abas de cada Casa.</p>'
+      : pizza(DATA.categorias_gastos[abas[aba][0]])}
+    <h4>Maiores gastos</h4>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Nome</th><th>Partido/UF</th><th class="n">Total</th></tr></thead>
+      <tbody>${top.map((p, i) => `<tr><td>${i + 1}</td><td>${linkP(p)}</td><td>${esc(p.partido)}-${esc(p.uf)}</td><td class="n">${brl(p.gasto_total)}</td></tr>`).join('')}</tbody>
+    </table></div>
+
+    ${metodologia(pts)}`;
+}
+
+// Resumo das pautas classificadas de uma ou das duas Casas.
+function resumoPautas(pts) {
+  const com = e => pts.filter(p => temEixo(p, e));
+  const lado = (e, sinal) => com(e).filter(p => Math.sign(p[e + '_p']) === sinal);
+  const venceu = l => l.filter(p => p.sim > p.nao).length;
+  const disputadas = com('ed').concat(com('aut').filter(p => !temEixo(p, 'ed')))
+    .sort((a, b) => Math.abs(a.sim - a.nao) / (a.sim + a.nao) - Math.abs(b.sim - b.nao) / (b.sim + b.nao)).slice(0, 5);
+  return `<h3>Pautas votadas (2023–${DATA.ano})</h3>
+    <div class="kpis">
+      <div class="kpi">Votações com posições informadas <b>${pts.filter(p => p.ed_p != null || p.aut_p != null).length}</b><span class="muted">${com('ed').length} com efeito esquerda × direita · ${com('aut').length} em autoridade</span></div>
+      <div class="kpi">Pautas de esquerda <b>${lado('ed', -1).length}</b><span class="muted">"Sim" venceu em ${venceu(lado('ed', -1))}</span></div>
+      <div class="kpi">Pautas de direita <b>${lado('ed', 1).length}</b><span class="muted">"Sim" venceu em ${venceu(lado('ed', 1))}</span></div>
+      <div class="kpi">Autoritárias · libertárias <b>${lado('aut', 1).length} · ${lado('aut', -1).length}</b><span class="muted">"Sim" venceu em ${venceu(lado('aut', 1))} · ${venceu(lado('aut', -1))}</span></div>
+    </div>
+    <h4>Votações mais disputadas</h4>
+    <div class="scroll"><table>
+      <thead><tr><th>Data</th><th>Proposição</th><th class="n">Sim × Não</th><th class="n">Esq/dir</th><th class="n">Aut</th></tr></thead>
+      <tbody>${disputadas.map(p => `<tr><td>${dataBR(p.data)}</td>
+        <td><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.proposicao)}</a> <span class="muted">${esc(p.justificativa)}</span></td>
+        <td class="n">${p.sim} × ${p.nao}</td><td class="n">${parPauta(p, 'ed')}</td><td class="n">${parPauta(p, 'aut')}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <p><a href="#/Pautas">Ver todas as pautas e suas fontes →</a></p>`;
+}
+
+function metodologia(pts) {
+  const n = (casa, e) => pts.filter(p => p.casa === casa && temEixo(p, e)).length;
+  return `<h3>Metodologia da posição política</h3>
+    <p>Votações nominais do texto principal de 2023 a ${DATA.ano}. Cada eixo recebe duas posições absolutas de −10 a +10:
+      a proposta aprovada pelo Sim e o status quo ou alternativa mantida pelo Não. Classifica-se o conteúdo, nunca o autor ou partido.</p>
+    <ul>
+      <li><b>Esquerda × direita:</b> igualdade e hierarquia na economia, direitos, costumes, segurança, ambiente e terra.
+        Direitos LGBT e fim da escala 6×1 são âncoras de esquerda/centro-esquerda; não implicam extrema-esquerda.</li>
+      <li><b>Autoridade:</b> liberdades individuais (−) e coerção estatal (+), considerando democracia e Estado de direito.</li>
+    </ul>
+    <p>Duas classificações independentes concordam quando a proposta tem o mesmo sinal e as posições de cada alternativa
+      diferem no máximo 3 pontos: usam-se as médias. Divergências exigem desempate; informação insuficiente fica vazia.</p>
+    <p>A posição parlamentar minimiza votos incompatíveis numa grade de 0,1. Cada voto exige o lado da alternativa escolhida
+      em relação ao ponto médio entre proposta e status quo. Sim escolhe a proposta; Não/Obstrução escolhem a alternativa.
+      Abstenções e ausências não contam. Exigem-se ${DATA.min_votos_eixo} votos informativos por eixo.</p>
+    <p>Empates usam o meio do intervalo ótimo. Se ele chega à ponta da escala, usamos o corte respeitado mais extremo ±0,5,
+      limitado à alternativa apoiada e ao intervalo ótimo. Intervalos separados são resolvidos pela largura e proximidade do centro,
+      conforme o livro de regras. Votar sempre em propostas moderadas não leva automaticamente aos extremos.</p>
+    <p>Voto com a maioria pesa 1; com a minoria, até ${DATA.max_bonus_minoria}×.
+      Consensos entram no cálculo e os lados não recebem pesos totais iguais. O resultado pode ser assimétrico.</p>
+    <p>São 24 subquadrantes: seis faixas em esquerda × direita (cortes −7, −4, 0, +4, +7) e quatro em autoridade
+      (−5, 0, +5). Os cortes de esquerda × direita adaptam o survey de Bolognesi, Ribeiro e Codato; o centro foi dividido
+      nas duas faixas centrais. “Extrema” aqui é faixa espacial, não diagnóstico de rejeição da democracia no sentido de Mudde.</p>
+    <p><b>Limites:</b> dependência da classificação das alternativas e da agenda observada; pouca evidência amplia a incerteza.
+      Pautas de autoridade: ${n('Câmara', 'aut')} na Câmara e ${n('Senado', 'aut')} no Senado.</p>
+    <p>Arquivos: <a href="metodologia/codebook.md">livro de regras v3</a> ·
+      <a href="metodologia/referencias.md">referências e posições partidárias dos estudos</a> ·
+      ${DATA.versao_metodologia === 3 ? '<a href="metodologia/classificacao.csv">classificação final</a> ·' : 'classificação v3 pendente ·'}
+      <a href="metodologia/v2/codebook.md">arquivo v2</a> ·
+      <a href="metodologia/votacoes_candidatas.csv">votações candidatas</a></p>`;
+}
+
+// Lista de todas as votações classificadas, com filtros e link para a fonte oficial.
+async function pautas() {
+  const hash = location.hash;
+  const { pautas: todas, autobeneficio } = await carregarPautas();
+  if (location.hash !== hash) return;
+  $('#app').innerHTML = `
+    ${nav('Pautas')}
+    <p class="muted">Votações nominais do texto principal, 2023–${DATA.ano}. Posições de −10 a +10 da proposta (Sim) e do status quo/alternativa (Não)
+      (esq/dir: − esquerda / + direita; aut: − libertário / + autoritário). Veja a metodologia na aba Resumo.</p>
+    <div class="kpis" style="margin-bottom:8px">
+      <select id="f-casa" aria-label="Casa"><option value="">Câmara e Senado</option><option>Câmara</option><option>Senado</option></select>
+      <select id="f-eixo" aria-label="Eixo">
+        <option value="" selected>Todas</option><option value="algum">Com efeito em algum eixo</option><option value="ed">Esquerda × direita</option>
+        <option value="aut">Autoridade</option><option value="nenhum">Sem efeito (alternativas iguais)</option><option value="pendente">Classificação pendente</option></select>
+    </div>
+    <input type="search" id="f-q" placeholder="Buscar por proposição ou tema" aria-label="Buscar">
+    <div class="scroll"><table>
+      <thead><tr><th>Data</th><th>Casa</th><th>Proposição</th><th class="n">Sim × Não</th><th class="n">Esq/dir</th><th class="n">Aut</th></tr></thead>
+      <tbody id="pautas"></tbody>
+    </table></div>
+    <p class="muted" id="contagem"></p>
+
+    <h3>Pautas de autobenefício</h3>
+    <p class="muted">Lista separada, curada à mão, de votações em que parlamentares legislaram em benefício próprio ou dos partidos.
+      Votar "Sim" desconta pontos da nota de atuação.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Casa</th><th>Pauta</th><th>Fonte</th></tr></thead>
+      <tbody>${autobeneficio.map(a => `<tr><td>${a.casa}</td><td>${esc(a.pauta)}</td>
+        <td><a href="${esc(a.url)}" target="_blank" rel="noopener">dados oficiais</a></td></tr>`).join('')}</tbody>
+    </table></div>`;
+  const filtrar = () => {
+    const casa = $('#f-casa').value, eixoF = $('#f-eixo').value, q = $('#f-q').value.toLowerCase();
+    const lista = todas.filter(p => (!casa || p.casa === casa)
+      && (eixoF === '' || (eixoF === 'algum' ? temEixo(p, 'ed') || temEixo(p, 'aut') : eixoF === 'pendente' ? p.ed_p == null && p.aut_p == null : eixoF === 'nenhum' ? p.ed_p != null && p.aut_p != null && !temEixo(p, 'ed') && !temEixo(p, 'aut') : temEixo(p, eixoF)))
+      && (!q || (p.proposicao + ' ' + p.ementa + ' ' + p.justificativa).toLowerCase().includes(q)));
+    $('#pautas').innerHTML = lista.map(p => `<tr>
+      <td>${dataBR(p.data)}</td><td>${p.casa}</td>
+      <td><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.proposicao)}</a>
+        <details><summary>${esc(p.justificativa)}</summary><p>${esc(p.ementa)}</p><p class="muted">${esc(p.descricao)}${p.origem === 'desempate' ? ' · classificação decidida no desempate' : ''}</p></details></td>
+      <td class="n">${p.sim} × ${p.nao}</td>
+      <td class="n ${temEixo(p, 'ed') ? '' : 'muted'}">${parPauta(p, 'ed')}</td><td class="n ${temEixo(p, 'aut') ? '' : 'muted'}">${parPauta(p, 'aut')}</td></tr>`).join('');
+    $('#contagem').textContent = `${lista.length} de ${todas.length} votações`;
+  };
+  ['#f-casa', '#f-eixo', '#f-q'].forEach(id => $(id).oninput = filtrar);
+  filtrar();
+}
+
+// Rosca em SVG: um círculo por fatia com stroke-dasharray; até 7 categorias + "Outras".
+function pizza(categorias) {
+  const top = categorias.slice(0, 7);
+  const resto = categorias.slice(7).reduce((s, c) => s + c[1], 0);
+  if (resto) top.push(['Outras', resto]);
+  const total = top.reduce((s, c) => s + c[1], 0);
+  const C = 2 * Math.PI * 40;
+  let acc = 0;
+  const fatias = top.map(([nome, v], i) => {
+    const len = v / total * C, gap = top.length > 1 ? Math.min(1, len / 2) : 0;
+    const el = `<circle r="40" cx="50" cy="50" fill="none" stroke="var(--s${i + 1})" stroke-width="18"
+      stroke-dasharray="${len - gap} ${C - len + gap}" stroke-dashoffset="${-acc}">
+      <title>${esc(nome)}: ${brl(v)} (${pct(v / total)})</title></circle>`;
+    acc += len;
+    return el;
+  }).join('');
+  return `<div class="pizza">
+    <svg viewBox="0 0 100 100" role="img" aria-label="Gastos por categoria"><g transform="rotate(-90 50 50)">${fatias}</g></svg>
+    <table><tbody>${top.map(([nome, v], i) => `<tr>
+      <td><span class="cor" style="background:var(--s${i + 1})"></span>${esc(nome)}</td>
+      <td class="n">${brl(v)}</td><td class="n">${pct(v / total)}</td></tr>`).join('')}</tbody></table>
+  </div>`;
+}
+</script>
+</body>
+</html>
