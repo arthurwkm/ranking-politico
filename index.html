@@ -166,7 +166,6 @@ async function detalhe(cargo, id) {
       <tbody>
         ${linha('Presença em sessões', `${p.presencas} de ${p.sessoes} (${p.sessoes - p.presencas} faltas)`, p.taxa_presenca, w.presenca)}
         ${linha('Votações nominais', `${p.votos} de ${p.votacoes}`, p.taxa_votacoes, w.votacoes)}
-        ${linha('Proposições apresentadas', `${p.proposicoes} (percentil no cargo)`, p.indice_proposicoes, w.proposicoes)}
         <tr><td>Votos em autobenefício</td><td class="n">${p.autobeneficio_sim} "Sim" de ${p.autobeneficio_total} pautas</td><td></td><td></td>
           <td class="n ${p.penalidade ? 'bad' : ''}">${p.penalidade == null ? '—' : '−' + p.penalidade.toFixed(1)}</td></tr>
       </tbody>

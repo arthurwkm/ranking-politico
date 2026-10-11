@@ -2,12 +2,12 @@
 
 Uso: python3 build.py [ano]   (padrão: ano atual)
 """
-import bisect, csv, http.client, io, json, os, sys, time, unicodedata, urllib.request, zipfile
+import csv, http.client, io, json, os, sys, time, unicodedata, urllib.request, zipfile
 from collections import defaultdict
 from datetime import date, datetime
 
 ANO = int(sys.argv[1]) if len(sys.argv) > 1 else date.today().year
-PESOS = {"presenca": 0.4, "votacoes": 0.4, "proposicoes": 0.2}
+PESOS = {"presenca": 0.5, "votacoes": 0.5}
 CAMARA_API = "https://dadosabertos.camara.leg.br/api/v2"
 CAMARA_ARQ = "https://dadosabertos.camara.leg.br/arquivos"
 SENADO = "https://legis.senado.leg.br/dadosabertos"
@@ -24,8 +24,6 @@ AUTOBENEFICIO_CAMARA = {  # idVotacao -> pauta
     "2352476-149": "PEC 9/2023 (1º turno) – anistia a partidos que descumpriram cotas de raça e gênero",
     "2352476-168": "PEC 9/2023 (2º turno) – anistia a partidos que descumpriram cotas de raça e gênero",
     "2387067-33": "PLP 192/2023 – reduz prazos de inelegibilidade da Lei da Ficha Limpa",
-    "2383019-54": "PLP 177/2023 – aumenta o número de deputados de 513 para 531",
-    "2383019-91": "PLP 177/2023 (emendas do Senado) – aumenta o número de deputados",
     "2270800-135": "PEC 3/2021 (1º turno) – PEC da Blindagem: exige aval do Congresso para processar parlamentares",
     "2270800-160": "PEC 3/2021 (2º turno) – PEC da Blindagem: exige aval do Congresso para processar parlamentares",
     "2565441-32": "PL 4822/2025 – limita multas e descontos do Fundo Partidário dos partidos",
@@ -33,7 +31,6 @@ AUTOBENEFICIO_CAMARA = {  # idVotacao -> pauta
 AUTOBENEFICIO_SENADO = {  # codigoSessaoVotacao -> (data, pauta)
     "6873": ("2024-08-14", "PEC 9/2023 (1º turno) – anistia a partidos que descumpriram cotas de raça e gênero"),
     "6874": ("2024-08-14", "PEC 9/2023 (2º turno) – anistia a partidos que descumpriram cotas de raça e gênero"),
-    "6951": ("2025-06-25", "PLP 177/2023 – aumenta o número de deputados de 513 para 531"),
     "7007": ("2025-09-02", "PLP 192/2023 – reduz prazos de inelegibilidade da Lei da Ficha Limpa"),
 }
 
@@ -260,11 +257,6 @@ def deputados_federais():
             historico[v["deputado_id"]].append({"id": v["idVotacao"], "data": v["dataHoraVoto"][:10], "proposicao": titulo, "ementa": ementa,
                                                 "descricao": plen[v["idVotacao"]], "voto": v["voto"]})
 
-    props = defaultdict(set)
-    for a in get_csv(f"proposicoesAutores/csv/proposicoesAutores-{ANO}.csv"):
-        if a["idDeputadoAutor"]:
-            props[a["idDeputadoAutor"]].add(a["idProposicao"])
-
     print("baixando cota parlamentar da Câmara", file=sys.stderr)
     gastos = defaultdict(list)
     z = zipfile.ZipFile(io.BytesIO(baixar(f"https://www.camara.leg.br/cotas/Ano-{ANO}.csv.zip")))
@@ -297,7 +289,6 @@ def deputados_federais():
             "url": f"https://www.camara.leg.br/deputados/{i}",
             "presencas": len(presencas[i]), "sessoes": len(sessoes),
             "votos": votos[i], "votacoes": len(votacoes_nominais),
-            "proposicoes": len(props[i]),
             "autobeneficio_sim": sum(a["voto"] == "Sim" for a in autobeneficio[i]),
             "autobeneficio_total": len(AUTOBENEFICIO_CAMARA),
             **posicao(votos_class[i]),
@@ -362,7 +353,6 @@ def senadores():
     for p in lista:
         i = p["IdentificacaoParlamentar"]
         cod = i["CodigoParlamentar"]
-        props = get_json(f"{SENADO}/processo?codigoParlamentarAutor={cod}&ano={ANO}")
         completo = set(norm(i["NomeCompletoParlamentar"]).split())
         nome_gasto = next((n for n in gastos if n == norm(i["NomeParlamentar"]) or set(n.split()) <= completo), None)
         out.append({
@@ -373,7 +363,6 @@ def senadores():
             # o Senado não publica lista de presença por sessão em formato aberto.
             "presencas": len(presentes[cod]), "sessoes": len(sessoes[cod]),
             "votos": votos[cod], "votacoes": total_vot[cod],
-            "proposicoes": len(props),
             "autobeneficio_sim": sum(a["voto"] == "Sim" for a in autobeneficio[cod]),
             "autobeneficio_total": len(AUTOBENEFICIO_SENADO),
             **posicao(votos_class[cod]),
@@ -390,21 +379,18 @@ def senadores():
 def pontuar(politicos):
     sem_dados = [p for p in politicos if not p["sessoes"] or not p["votacoes"]]
     ativos = [p for p in politicos if p["sessoes"] and p["votacoes"]]
-    props = sorted(p["proposicoes"] for p in ativos)
     for p in ativos:
         p["taxa_presenca"] = p["presencas"] / p["sessoes"]
         p["taxa_votacoes"] = p["votos"] / p["votacoes"]
         # percentil: fração dos colegas de cargo com menos proposições (resiste a outliers)
-        p["indice_proposicoes"] = bisect.bisect_left(props, p["proposicoes"]) / max(len(props) - 1, 1)
         p["penalidade"] = round(PENALIDADE_AUTOBENEFICIO * p["autobeneficio_sim"] / max(p["autobeneficio_total"], 1), 1)
         p["nota"] = round(max(0, 100 * (PESOS["presenca"] * p["taxa_presenca"]
-                                        + PESOS["votacoes"] * p["taxa_votacoes"]
-                                        + PESOS["proposicoes"] * p["indice_proposicoes"]) - p["penalidade"]), 1)
+                                        + PESOS["votacoes"] * p["taxa_votacoes"]) - p["penalidade"]), 1)
     ativos.sort(key=lambda p: -p["nota"])
     for pos, p in enumerate(ativos, 1):
         p["posicao"] = pos
     for p in sem_dados:
-        p.update(taxa_presenca=None, taxa_votacoes=None, indice_proposicoes=None, penalidade=None, nota=None, posicao=None)
+        p.update(taxa_presenca=None, taxa_votacoes=None, penalidade=None, nota=None, posicao=None)
     return ativos + sem_dados
 
 
@@ -430,10 +416,10 @@ def escrever_pautas():
 
 def _teste():
     base = dict(sessoes=10, votacoes=10, autobeneficio_sim=0, autobeneficio_total=4)
-    r = pontuar([dict(base, presencas=10, votos=10, proposicoes=50), dict(base, presencas=5, votos=5, proposicoes=0),
-                 dict(base, presencas=10, votos=10, proposicoes=50, autobeneficio_sim=2),
-                 dict(base, sessoes=0, votacoes=0, presencas=0, votos=0, proposicoes=0)])
-    assert [p["nota"] for p in r] == [90.0, 80.0, 40.0, None], r  # empate em proposições = percentil 0.5
+    r = pontuar([dict(base, presencas=10, votos=10), dict(base, presencas=5, votos=5),
+                 dict(base, presencas=10, votos=10, autobeneficio_sim=2),
+                 dict(base, sessoes=0, votacoes=0, presencas=0, votos=0)])
+    assert [p["nota"] for p in r] == [100.0, 90.0, 50.0, None], r
     assert r[0]["posicao"] == 1 and r[3]["posicao"] is None
     v = lambda p, q, voto="Sim", **kw: dict(ed_p=p, ed_q=q, aut_p=None, aut_q=None, voto=voto, **kw)
     assert posicao([v(-4, 0)] * 5)["ed"] == -10 and posicao([v(-4, 0, "Não")] * 5)["ed"] == 10
