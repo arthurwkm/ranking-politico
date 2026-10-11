@@ -1,0 +1,336 @@
+casa,id,ed_p,ed_q,aut_p,aut_q,origem,justificativa
+Câmara,2345468-38,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2337246-43,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2355135-49,2.0,-1.0,0.0,0.0,consenso,"Sim susta decreto que flexibilizava prestação de saneamento por estatais sem licitação, reforçando concorrência do marco legal; Não mantém decreto. Dimensão Estado/mercado."
+Câmara,2351179-51,-2.0,0.0,0.0,0.0,desempate,"Sim impõe igualdade salarial entre gêneros com fiscalização e multas; Não mantém regra anterior menos efetiva. Igualdade gradual; regulação coercitiva limitada.; aut: Fiscalização/multa trabalhista é regulação econômica, sem efeito no regime de liberdades"
+Câmara,2334279-57,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2357055-29,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2115253-118,-1.5,0.0,0.0,0.0,consenso,"Sim dá preferência aos Correios (estatal) na contratação de serviços postais por órgãos federais; Não mantém contratação usual. Estado/mercado, incremental."
+Câmara,2357053-47,1.0,3.0,0.0,0.0,consenso,"Sim institui arcabouço fiscal com crescimento real limitado da despesa; Não mantém teto de gastos (EC 95), mais restritivo. Ambas pró-ajuste fiscal, q mais à direita."
+Câmara,345311-270,5.0,-1.0,2.0,0.0,desempate,Sim fixa marco temporal e restringe demarcação/abre terras indígenas a exploração e intervenções sem consulta; Não mantém regime constitucional atual. Terra/direitos; coerção sobre povos indígenas.; aut: Intervenções em terras indígenas sem consulta: coerção limitada sobre minoria
+Câmara,2345493-41,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2358922-21,1.0,0.0,0.0,0.0,consenso,Sim permite usar resgate de previdência privada/seguros como garantia de crédito; Não mantém vedação. Desregulação financeira pontual.
+Câmara,2351990-37,-1.5,-0.5,0.0,0.0,consenso,Sim amplia Mais Médicos com formação de especialistas; Não mantém programa sem a estratégia. Expansão incremental de serviço público.
+Câmara,2364109-35,0.0,0.0,1.0,0.0,desempate,Sim tipifica discriminação contra pessoas politicamente expostas por instituições financeiras; sem conteúdo distributivo (proteção a políticos); novo tipo penal limitado.; aut: Novo tipo penal limitado
+Câmara,2196833-326,-1.0,1.0,0.0,0.0,desempate,"Sim aprova reforma tributária sobre consumo (IVA dual, cesta básica desonerada, cashback, progressividade de ITCMD/IPVA); Não mantém sistema cumulativo regressivo. Igualdade incremental.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Câmara,2196833-328,-1.0,1.0,0.0,0.0,desempate,"Sim aprova reforma tributária sobre consumo (IVA dual, cesta básica desonerada, cashback, progressividade de ITCMD/IPVA); Não mantém sistema cumulativo regressivo. Igualdade incremental.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Câmara,2196833-373,-1.0,1.0,0.0,0.0,desempate,"Sim aprova reforma tributária sobre consumo (IVA dual, cesta básica desonerada, cashback, progressividade de ITCMD/IPVA); Não mantém sistema cumulativo regressivo. Igualdade incremental.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Câmara,2372099-6,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,2205254-76,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,1197773-90,1.0,0.0,2.5,0.0,consenso,Sim qualifica homicídio contra juízes/MP e agrava penas; Não mantém Código Penal. Punitivismo pontual.
+Câmara,2357053-108,-1.0,0.0,0.0,0.0,desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: Emendas excluem Fundeb/FCDF do limite: expansão incremental de gasto social vs limite mais amplo
+Câmara,2357053-110,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo das emendas rejeitadas não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,2359135-39,-2.5,-0.5,0.0,0.0,consenso,Sim institui política de valorização real permanente do salário mínimo; Não mantém reajuste sem regra de ganho real. Ampliação parcial de direitos trabalhistas.
+Câmara,2350586-63,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Desoneração setorial a empresas: leve direita, não liberalização geral"
+Câmara,2288318-70,0.0,0.0,-1.0,0.0,consenso,Sim suprime perda automática da nacionalidade brasileira; Não mantém perda. Sem conteúdo distributivo; amplia garantia individual.
+Câmara,2288318-78,0.0,0.0,-1.0,0.0,consenso,Sim suprime perda automática da nacionalidade brasileira; Não mantém perda. Sem conteúdo distributivo; amplia garantia individual.
+Câmara,2387066-63,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2372071-41,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2387067-33,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2367600-49,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2224999-96,-1.0,0.0,0.0,0.0,consenso,Sim prorroga cota de tela obrigatória para cinema nacional; Não deixa a cota expirar. Regulação de mercado incremental.
+Câmara,2309053-174,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo das emendas do Senado não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,2309053-176,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo das emendas do Senado não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,2358915-67,-2.0,0.0,0.0,0.0,consenso,Sim cria política de trabalho e cidadania para população de rua; Não mantém ausência da política. Inclusão social incremental.
+Câmara,2149303-50,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2383287-43,-3.0,0.0,0.0,0.0,consenso,Sim tributa fundos exclusivos e offshores de alta renda; Não mantém diferimento/isenção. Progressividade tributária pontual.
+Câmara,2376169-62,1.5,0.0,3.0,0.0,consenso,Sim aumenta penas de furto e roubo; Não mantém penas atuais. Punitivismo setorial.
+Câmara,2397925-25,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2115253-175,,,0.0,0.0,divergência sem desempate,"Informação insuficiente: substitutivo/versão do Senado vs. texto da Câmara, diferenças concretas não identificáveis na candidata. Autoridade inaplicável.; ed: informação insuficiente: diferença entre substitutivo do Senado e texto da Câmara (ambos priorizam Correios) não identificada; ed: informação insuficiente (divergência sem desempate)"
+Câmara,2391935-43,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,575585-92,2.0,0.0,0.0,0.0,consenso,Sim cria contrato por prazo determinado para jovens com menos encargos; Não mantém CLT. Flexibilização trabalhista parcial.
+Câmara,2312373-140,,,0.0,0.0,divergência sem desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: ed: informação insuficiente sobre emenda do Senado; aut: incentivo fiscal sem efeito em liberdades; ed: informação insuficiente (divergência sem desempate); aut: ed: informação insuficiente sobre emenda do Senado; aut: incentivo fiscal sem efeito em liberdades"
+Câmara,2355510-53,-1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Renegociação de dívidas a pequenos produtores e MEI: alívio incremental"
+Câmara,2381043-63,0.0,0.0,0.0,0.0,desempate,Sim institui mês de combate às desigualdades com diretrizes de política; Não mantém ausência. Conteúdo igualitário simbólico.; ed: Mês comemorativo: ato simbólico sem efeito substantivo
+Câmara,2125189-176,1.0,0.0,0.0,0.0,desempate,"Sim simplifica regulação ética de pesquisa clínica, acelerando aprovação; Não mantém sistema CEP/Conep. Desregulação parcial.; ed: Simplifica regulação de pesquisa clínica: desregulação parcial"
+Câmara,2190084-79,1.0,0.0,0.0,0.0,desempate,"Sim abre exploração de eólicas offshore com incentivos a térmicas; Não mantém marco atual. Mercado/energia, efeito ambiental misto.; ed: Marco de eólicas offshore com incentivos a térmicas: mercado/energia, misto"
+Câmara,2299903-53,0.0,0.0,0.0,0.0,desempate,Sim torna feriado nacional o Dia de Zumbi e da Consciência Negra; Não mantém data não feriado. Reconhecimento racial incremental.; ed: Feriado comemorativo: homenagem sem efeito distributivo
+Câmara,2333929-40,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2398741-64,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,1701755-60,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2231632-97,1.0,0.0,1.0,0.0,consenso,Sim institui linguagem simples e veda linguagem neutra na administração; Não mantém ausência de norma. Conservadorismo cultural limitado; restrição de expressão pública pontual.
+Câmara,2409076-34,-2.0,0.0,0.0,0.0,consenso,Sim financia incentivo à permanência no ensino médio (Pé-de-Meia); Não mantém sem o programa. Transferência social incremental.
+Câmara,2387579-37,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2384692-35,-1.0,1.0,0.0,0.0,desempate,Sim restringe exclusão de subvenções de ICMS da base do IRPJ/CSLL; Não mantém benefício amplo a empresas. Redução de privilégio tributário.; ed: Limita benefício tributário a empresas (-1) vs benefício amplo (+1)
+Câmara,2414224-6,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,259094-136,-1.0,1.0,0.0,0.0,desempate,"Sim aprova reforma tributária sobre consumo (IVA dual, cesta básica desonerada, cashback, progressividade de ITCMD/IPVA); Não mantém sistema cumulativo regressivo. Igualdade incremental.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Câmara,259094-181,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,259094-190,-1.0,1.0,0.0,0.0,desempate,"Sim aprova reforma tributária sobre consumo (IVA dual, cesta básica desonerada, cashback, progressividade de ITCMD/IPVA); Não mantém sistema cumulativo regressivo. Igualdade incremental.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Câmara,2395883-53,2.5,0.0,0.0,0.0,consenso,"Sim declara BR-319 infraestrutura crítica com trafegabilidade garantida, reduzindo condicionantes ambientais; Não mantém licenciamento usual. Ambiente vs. desenvolvimento."
+Câmara,1548579-126,-1.0,0.0,0.0,0.0,consenso,Sim institui mercado regulado de carbono (SBCE); Não mantém ausência. Proteção ambiental incremental via mercado regulado.
+Câmara,2374400-110,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo das emendas do Senado não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,2374400-121,0.0,0.0,1.0,0.0,desempate,"Informação insuficiente: conteúdo da(s) emenda(s) do Senado votada(s) e do texto alternativo não identificável na candidata.; ed: Emenda 3 exclui jogos online (mantém proibição) vs autorização; ed neutro, aut proibição limitada; aut: Emenda 3 exclui jogos online (mantém proibição) vs autorização; ed neutro, aut proibição limitada"
+Câmara,2382257-49,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2167882-83,-2.0,0.0,0.0,0.0,consenso,Sim estabelece tarifa social de água e esgoto para baixa renda; Não mantém ausência de regra nacional. Inclusão social incremental.
+Câmara,2323391-73,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2238434-80,-1.0,0.0,0.0,0.0,desempate,Sim amplia mandatos de biocombustíveis e captura de carbono; Não mantém regras atuais. Política ambiental incremental.; ed: Mandatos de biocombustíveis e captura de carbono: política ambiental incremental
+Câmara,2416729-28,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2416804-43,1.0,0.0,0.0,0.0,consenso,"Sim concede depreciação acelerada a máquinas, reduzindo tributação do investimento; Não mantém regra geral. Redução tributária limitada."
+Câmara,2416826-49,1.0,0.0,0.0,0.0,consenso,Sim reforça poderes de credores na falência (gestor fiduciário); Não mantém lei atual. Reforma pró-credor pontual.
+Câmara,2400758-62,-1.0,0.0,0.0,0.0,desempate,"Sim recria seguro obrigatório de trânsito (SPVAT) para indenizar vítimas; Não mantém sem seguro. Proteção social incremental; obrigação compulsória limitada.; aut: Seguro obrigatório é obrigação econômica, sem efeito no regime de liberdades"
+Câmara,2326582-61,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Desoneração setorial a empresas: leve direita, não liberalização geral"
+Câmara,2324721-94,2.0,0.0,0.0,0.0,consenso,Sim exclui silvicultura do rol de atividades poluidoras; Não mantém controle ambiental. Desregulação ambiental parcial.
+Câmara,2416733-42,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2433327-49,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2349493-82,4.0,0.0,4.0,0.0,consenso,"Sim impede ocupantes/invasores de terra de receber benefícios, cargos e programas; Não mantém regra atual. Proteção ampla da propriedade e sanção a movimentos sociais."
+Câmara,2166464-128,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2422697-129,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo das emendas do Senado não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,2439876-43,0.0,0.0,1.0,0.0,consenso,"Sim permite suspensão cautelar de mandato por agressão física; Não mantém regimento. Disciplina interna, sem conteúdo distributivo."
+Câmara,2422095-37,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2399598-112,0.0,0.0,0.0,0.0,consenso,Versões do Senado e da Câmara do novo ensino médio convergentes (recomposição da formação geral); alternativas equivalentes: 0/0.
+Câmara,2430143-72,-1.0,1.0,0.0,0.0,desempate,"Sim regulamenta IBS/CBS com cesta básica zerada e cashback; Não mantém tributos atuais. Igualdade incremental, mesma linha da reforma.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Câmara,2352476-149,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2352476-168,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2388029-86,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2388029-94,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2448947-5,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,2438459-55,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2320081-66,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2448974-43,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2178408-165,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,541855-97,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2204088-88,-1.0,0.0,0.0,0.0,desempate,Sim cria proteção de direitos a pessoas com fibromialgia; Não mantém ausência. Inclusão social incremental.; ed: Proteção de direitos e isenção a pessoas com fibromialgia: inclusão incremental
+Câmara,2447191-41,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2454704-53,1.0,2.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Reoneração gradual (+1) vs desoneração integral mantida (+2)"
+Câmara,2438459-69,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2466104-39,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,1548579-194,,,0.0,0.0,divergência sem desempate,"Informação insuficiente: substitutivo/versão do Senado vs. texto da Câmara, diferenças concretas não identificáveis na candidata. Autoridade inaplicável.; ed: informação insuficiente: diferença entre substitutivo do Senado e texto da Câmara não identificada; ed: informação insuficiente (divergência sem desempate)"
+Câmara,2439779-55,-3.0,-1.0,0.0,0.0,consenso,Sim amplia cotas raciais em concursos para 30% com indígenas e quilombolas; Não mantém regime anterior de 20%. Igualdade racial gradual.
+Câmara,2456109-35,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2466104-95,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2461207-38,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2462730-34,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,1197773-140,,,,,consenso,Informação insuficiente: conteúdo da(s) emenda(s) do Senado votada(s) e do texto alternativo não identificável na candidata.
+Câmara,2454257-27,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2454400-42,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2194861-77,1.0,0.0,3.0,0.0,consenso,Sim amplia prazos de internação em medida de segurança; Não mantém regra atual. Endurecimento penal pontual.
+Câmara,2465140-45,1.5,0.0,3.5,0.0,consenso,Sim amplia instrumentos de persecução ao crime organizado e proteção jurídica a operações policiais; Não mantém lei atual. Punitivismo setorial; aumento de coerção.
+Câmara,2473389-58,2.0,1.0,0.0,0.0,consenso,"Sim restringe crescimento de despesas obrigatórias (salário mínimo, benefícios) dentro do arcabouço; Não mantém arcabouço sem os cortes. Ajuste fiscal com efeito distributivo."
+Câmara,2269745-144,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo das emendas do Senado não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,2473389-80,2.0,1.0,0.0,0.0,consenso,"Sim restringe crescimento de despesas obrigatórias (salário mínimo, benefícios) dentro do arcabouço; Não mantém arcabouço sem os cortes. Ajuste fiscal com efeito distributivo."
+Câmara,2460010-43,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2473375-59,1.5,0.0,0.0,0.0,consenso,Sim restringe regras de BPC/Bolsa Família no pacote de corte de gastos; Não mantém regras atuais. Ajuste fiscal com perda distributiva limitada.
+Câmara,2481282-8,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,347421-200,2.0,0.0,0.0,0.0,consenso,Sim restringe abono salarial e outras despesas sociais (PEC do corte de gastos); Não mantém regras atuais. Ajuste fiscal com efeito regressivo limitado.
+Câmara,347421-221,2.0,0.0,0.0,0.0,consenso,Sim restringe abono salarial e outras despesas sociais (PEC do corte de gastos); Não mantém regras atuais. Ajuste fiscal com efeito regressivo limitado.
+Câmara,2162802-89,-1.5,0.0,0.0,0.0,desempate,Sim prevê descredenciamento de escolas que recusam matrícula (inclusão); Não mantém regra atual. Inclusão incremental; sanção administrativa limitada.; aut: Sanção administrativa a escola: regulação sem efeito no regime de liberdades
+Câmara,2438467-47,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2397890-54,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2397890-55,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2463712-40,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2466108-33,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2485066-33,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2486199-32,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2360457-45,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2410601-46,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2442848-50,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2463814-46,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2481875-38,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2483495-52,0.0,0.0,0.0,0.0,desempate,Sim ajusta repasses da Política Aldir Blanc de fomento à cultura; Não mantém lei atual. Fomento público incremental.; ed: Ajuste técnico de repasses da Política Aldir Blanc
+Câmara,2456731-71,-1.0,0.0,0.0,0.0,desempate,Informação insuficiente: efeito concreto das mudanças no Código de Aeronáutica não identificável. Autoridade inaplicável.; ed: Amplia capacidade de combate a incêndios florestais: proteção ambiental incremental
+Câmara,2233324-86,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2383019-54,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2494408-30,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2442331-46,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2456110-50,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2481257-37,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2497993-33,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,604557-191,-1.0,0.0,0.0,0.0,desempate,Sim institui política de conservação do bioma marinho com sanções ambientais; Não mantém ausência. Proteção ambiental incremental.; aut: Política ambiental com sanções usuais: sem efeito no regime de liberdades
+Câmara,2453934-59,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2297512-70,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2324988-23,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2471177-56,2.0,0.0,0.0,0.0,consenso,Sim facilita ratificação de títulos de terras públicas em faixa de fronteira; Não mantém exigências atuais. Regularização favorável a detentores de terra.
+Câmara,2497816-44,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,264726-144,1.0,0.0,2.0,0.0,consenso,Sim aumenta pena de disparo de arma de uso restrito; Não mantém pena atual. Punitivismo pontual.
+Câmara,622019-73,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2383019-91,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2487358-48,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2515648-44,1.5,-0.5,0.0,0.0,consenso,Sim susta aumento de IOF; Não mantém alíquotas maiores. Redução tributária limitada.
+Câmara,2351284-38,2.0,0.0,4.0,0.0,consenso,Sim exige 80% de cumprimento da pena para progressão em certos crimes; Não mantém frações atuais. Endurecimento penal.
+Câmara,2252295-120,-1.0,0.0,0.0,0.0,consenso,Sim cria estratégia de fomento à indústria nacional de saúde; Não mantém ausência. Política industrial estatal incremental.
+Câmara,2413257-116,0.0,0.0,2.0,0.0,desempate,Sim criminaliza aproximação do agressor mesmo com consentimento da vítima; Não mantém regra atual. Proteção de mulheres; ampliação penal.; ed: Ampliação penal pontual; dimensão predominante é autoridade
+Câmara,2421211-88,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2480979-96,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2454495-144,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2454495-166,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2536848-6,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,2398530-73,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Renegociação ampla de dívidas rurais: subsídio setorial ao agro"
+Câmara,2500330-43,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,257161-462,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo específico da emenda do Senado e do texto sem ela não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,257161-465,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo específico da emenda do Senado e do texto sem ela não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,257161-467,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo específico da emenda do Senado e do texto sem ela não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,257161-476,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo específico da emenda do Senado e do texto sem ela não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,257161-479,,,0.0,0.0,divergência sem desempate,Informação insuficiente: conteúdo específico das emendas do Senado e do texto que subsiste sem elas não identificável na candidata. Autoridade inaplicável.; ed: informação insuficiente: conteúdo específico da emenda do Senado e do texto sem ela não identificado; ed: informação insuficiente (divergência sem desempate)
+Câmara,146708-38,0.0,0.0,0.0,0.0,consenso,Regras de datas de concursos/vestibulares; sem efeito nos eixos: 0/0.
+Câmara,2500260-34,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2530336-43,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2253943-133,0.0,0.0,0.0,0.0,desempate,"Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.; ed: Exceção a restrição de reajustes de servidores: efeito administrativo, sem conteúdo distributivo claro"
+Câmara,2432423-88,0.0,0.0,0.0,0.0,consenso,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0."
+Câmara,2318217-77,-1.0,0.0,0.0,0.0,consenso,Sim institui Sistema Nacional de Educação com cooperação federativa; Não mantém ausência. Expansão incremental de serviço público.
+Câmara,2335185-89,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2481721-32,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2490985-54,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2270800-135,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2270800-160,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2561475-6,0.0,0.0,0.0,0.0,consenso,Procedimento (quebra de interstício): 0/0.
+Câmara,2270800-175,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Câmara,2515300-38,-1.5,0.0,0.0,0.0,consenso,Sim amplia tarifa social de energia e abre mercado livre; Não mantém regras atuais. Predomina inclusão social incremental.
+Câmara,2519886-34,-1.0,0.0,0.0,0.0,desempate,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.; ed: Amplia acesso a atenção especializada no SUS: expansão incremental de serviço público
+Câmara,2541109-38,-1.0,0.0,0.0,0.0,desempate,Sim exclui despesas temporárias de saúde/educação do limite fiscal; Não mantém limite. Expansão de serviço público incremental.; ed: Exclui despesas de saúde/educação do limite: expansão incremental de serviço público
+Câmara,2483447-25,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2487436-169,-3.0,0.0,0.0,0.0,consenso,Sim isenta IR até R$ 5 mil e cria tributação mínima de altas rendas; Não mantém tabela atual. Progressividade tributária moderada.
+Câmara,2284555-280,-1.0,0.0,0.0,0.0,consenso,Sim amplia proteção e aposentadoria diferenciada a agentes comunitários de saúde; Não mantém regras atuais. Direito trabalhista parcial.
+Câmara,2284555-287,-1.0,0.0,0.0,0.0,consenso,Sim amplia proteção e aposentadoria diferenciada a agentes comunitários de saúde; Não mantém regras atuais. Direito trabalhista parcial.
+Câmara,2517547-55,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2438687-71,-1.0,0.0,0.0,0.0,consenso,Sim estabelece diretrizes de direito de crianças à natureza; Não mantém ausência. Política ambiental/social incremental.
+Câmara,2279186-86,1.0,0.0,0.0,0.0,consenso,Sim cria regime de atualização/regularização patrimonial com tributação reduzida e extinção de punibilidade; Não mantém regras atuais. Benefício a detentores de patrimônio.
+Câmara,545304-134,-1.0,0.0,0.0,0.0,consenso,Sim institui política de produção e consumo sustentáveis; Não mantém ausência. Ambiental incremental.
+Câmara,2225224-117,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2225224-125,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2576234-34,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2122682-86,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2122682-94,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2157806-137,-1.0,0.0,0.0,0.0,consenso,Sim regula streaming com cota de conteúdo nacional e Condecine; Não mantém ausência de regulação. Regulação de mercado incremental.
+Câmara,2564274-37,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,106701-223,-1.0,0.0,1.5,0.0,consenso,Sim tipifica crimes ambientais no comércio de peixes ornamentais; Não mantém lei atual. Proteção ambiental com ampliação penal pontual.
+Câmara,2157806-168,-1.0,0.0,0.0,0.0,consenso,Sim regula streaming com cota de conteúdo nacional e Condecine; Não mantém ausência de regulação. Regulação de mercado incremental.
+Câmara,2386051-93,3.5,-0.5,0.0,0.0,consenso,Sim impede desapropriação para reforma agrária de propriedade produtiva mesmo descumprindo função social; Não mantém lei atual. Restringe reforma agrária legal.
+Câmara,2482078-57,3.0,-2.0,3.0,-2.0,consenso,Sim susta resolução do Conanda que garantia atendimento e acesso a aborto legal a crianças vítimas de violência sexual; Não mantém resolução. Costumes; restrição a decisões sobre o corpo.
+Câmara,2533204-41,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2481858-53,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2270325-88,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2579832-62,3.0,0.0,5.0,0.0,consenso,"Sim aprova marco amplo contra crime organizado (penas, hediondez, prisão temporária, monitoramento); Não mantém leis atuais. Punitivismo abrangente."
+Câmara,2164336-110,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2237596-92,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2524984-33,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2422905-68,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2422905-75,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2358548-89,,,2.0,0.0,consenso,Sim reduz/extingue punição de condenados por atos contra o Estado Democrático (8/1); Não mantém penas. Sem conteúdo distributivo identificável; enfraquece proteção da ordem democrática.
+Câmara,2471177-102,,,0.0,0.0,divergência sem desempate,"Informação insuficiente: substitutivo/versão do Senado vs. texto da Câmara, diferenças concretas não identificáveis na candidata. Autoridade inaplicável.; ed: informação insuficiente: diferença entre substitutivo do Senado e texto da Câmara não identificada; ed: informação insuficiente (divergência sem desempate)"
+Câmara,2559194-42,1.0,0.0,-1.0,0.0,consenso,Sim institui código de defesa do contribuinte com garantias frente ao fisco; Não mantém regras atuais. Limita poder fiscal.
+Câmara,2438459-113,,,0.0,0.0,divergência sem desempate,"Informação insuficiente: substitutivo/versão do Senado vs. texto da Câmara, diferenças concretas não identificáveis na candidata. Autoridade inaplicável.; ed: informação insuficiente: diferença entre substitutivo do Senado e texto da Câmara não identificada; ed: informação insuficiente (divergência sem desempate)"
+Câmara,2541109-88,,,0.0,0.0,divergência sem desempate,"Informação insuficiente: substitutivo/versão do Senado vs. texto da Câmara, diferenças concretas não identificáveis na candidata. Autoridade inaplicável.; ed: informação insuficiente: diferença entre substitutivo do Senado e texto da Câmara não identificada; ed: informação insuficiente (divergência sem desempate)"
+Câmara,2554285-48,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2520670-52,-1.5,0.0,0.0,0.0,consenso,Sim reduz em ao menos 10% benefícios tributários federais; Não mantém benefícios. Reduz privilégios tributários.
+Câmara,2557414-32,-2.0,-0.5,0.0,0.0,consenso,Sim amplia Auxílio Gás com nova modalidade de fornecimento a baixa renda; Não mantém programa atual. Transferência social incremental.
+Câmara,2562173-30,0.0,0.0,0.0,0.0,desempate,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.; aut: Transformação administrativa da ANPD; sem mudança nas garantias de privacidade
+Câmara,2601040-31,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Desoneração setorial a empresas: leve direita, não liberalização geral"
+Câmara,2543171-49,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2578879-38,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2500080-320,0.0,0.0,1.0,0.0,consenso,Sim reorganiza competências federativas na segurança pública; Não mantém arranjo atual. Sem conteúdo distributivo; coordenação coercitiva limitada.
+Câmara,2500080-330,0.0,0.0,1.0,0.0,consenso,Sim reorganiza competências federativas na segurança pública; Não mantém arranjo atual. Sem conteúdo distributivo; coordenação coercitiva limitada.
+Câmara,2418774-66,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2595984-34,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Câmara,2611717-33,,,0.0,0.0,desempate,"Informação insuficiente: ementa genérica sobre benefícios tributários/despesas, efeito concreto das alternativas não identificável. Autoridade inaplicável.; aut: Regras de benefícios tributários: sem efeito no regime de liberdades"
+Câmara,2503998-75,0.0,0.0,1.0,0.0,consenso,Sim dá à ANP acesso a dados fiscais de regulados; Não mantém sigilo. Fiscalização limitada.
+Câmara,2162116-169,-2.5,0.0,0.0,0.0,consenso,Sim garante recursos mínimos constitucionais ao SUAS; Não mantém sem vinculação. Expansão de assistência social.
+Câmara,2608575-64,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2469569-38,0.0,0.0,0.0,0.0,desempate,Sim veda cláusula condominial que restrinja locação a partidos; Não mantém autonomia condominial. Liberdade de associação política; sem conteúdo distributivo.; aut: Regra civil sobre convenção condominial; efeito em liberdades indistinto
+Câmara,2162116-178,-2.5,0.0,0.0,0.0,consenso,Sim garante recursos mínimos constitucionais ao SUAS; Não mantém sem vinculação. Expansão de assistência social.
+Câmara,2191208-67,0.0,0.0,2.0,0.0,desempate,Sim torna obrigatórias penas restritivas adicionais a condenados por pedofilia; Não mantém regra atual. Endurecimento penal pontual.; ed: Ampliação penal pontual; dimensão predominante é autoridade
+Câmara,2601990-42,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2447983-57,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2233802-424,-4.0,0.0,0.0,0.0,consenso,"Sim reduz jornada constitucional para 36h semanais em transição de 10 anos, sem redução salarial; Não mantém 44h. Âncora fim da 6x1 (−4)."
+Câmara,2233802-438,-4.0,0.0,0.0,0.0,consenso,"Sim reduz jornada constitucional para 36h semanais em transição de 10 anos, sem redução salarial; Não mantém 44h. Âncora fim da 6x1 (−4)."
+Câmara,2351506-104,1.5,0.0,0.0,0.0,consenso,Sim amplia imunidade tributária de entidades religiosas; Não mantém alcance atual. Privilégio tributário com viés conservador limitado.
+Câmara,2351506-122,1.5,0.0,0.0,0.0,consenso,Sim amplia imunidade tributária de entidades religiosas; Não mantém alcance atual. Privilégio tributário com viés conservador limitado.
+Câmara,2122125-115,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2382675-97,-1.0,0.0,0.0,0.0,consenso,Sim estabelece diretrizes de política industrial estatal; Não mantém ausência. Estado/mercado incremental.
+Câmara,2606313-36,-1.0,0.0,0.0,0.0,desempate,Sim cria sistema nacional e recursos contra violência a mulheres; Não mantém ausência. Igualdade de gênero incremental.; aut: Rede de serviços e recursos contra violência: sem nova coerção identificada
+Câmara,2580259-24,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2611992-24,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2618177-71,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Câmara,2645346-18,0.0,0.0,0.0,0.0,consenso,Homenagem/data comemorativa ou ato internacional/indicação sem efeito nos eixos: 0/0.
+Câmara,2611313-31,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Desoneração setorial a empresas: leve direita, não liberalização geral"
+Senado,6675,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6676,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6678,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6680,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6704,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6705,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6706,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6708,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6714,1.0,3.0,0.0,0.0,consenso,"Sim institui arcabouço fiscal com crescimento real limitado da despesa; Não mantém teto de gastos (EC 95), mais restritivo. Ambas pró-ajuste fiscal, q mais à direita."
+Senado,6731,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6745,-1.0,1.0,0.0,0.0,consenso,Sim restabelece voto de qualidade da Fazenda no Carf; Não mantém desempate pró-contribuinte. Arrecadação/tributação de grandes empresas.
+Senado,6746,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6747,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6756,5.0,-1.0,2.0,0.0,desempate,Sim fixa marco temporal e restringe demarcação/abre terras indígenas a exploração e intervenções sem consulta; Não mantém regime constitucional atual. Terra/direitos; coerção sobre povos indígenas.; aut: Intervenções em terras indígenas sem consulta: coerção limitada sobre minoria
+Senado,6759,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6777,-1.0,1.0,0.0,0.0,desempate,"Sim aprova reforma tributária sobre consumo (IVA dual, cesta básica desonerada, cashback, progressividade de ITCMD/IPVA); Não mantém sistema cumulativo regressivo. Igualdade incremental.; ed: Reforma com cashback/cesta desonerada (-1) vs sistema cumulativo regressivo (+1)"
+Senado,6778,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6781,0.0,0.0,0.0,0.0,desempate,Sim limita decisões monocráticas e pedidos de vista no STF/tribunais; Não mantém regras atuais. Sem conteúdo distributivo; restringe controle judicial de forma limitada.; aut: Regra processual entre poderes; não altera garantias dos cidadãos
+Senado,6782,0.0,0.0,0.0,0.0,desempate,Sim limita decisões monocráticas e pedidos de vista no STF/tribunais; Não mantém regras atuais. Sem conteúdo distributivo; restringe controle judicial de forma limitada.; aut: Regra processual entre poderes; não altera garantias dos cidadãos
+Senado,6783,-2.0,0.0,0.0,0.0,desempate,Sim financia incentivo à permanência no ensino médio (Pé-de-Meia); Não mantém sem o programa. Transferência social incremental.; ed: Financia Pé-de-Meia: transferência social incremental
+Senado,6816,-1.0,1.0,0.0,0.0,desempate,Sim restringe exclusão de subvenções de ICMS da base do IRPJ/CSLL; Não mantém benefício amplo a empresas. Redução de privilégio tributário.; ed: Limita benefício tributário a empresas (-1) vs benefício amplo (+1)
+Senado,6818,2.0,0.0,4.0,0.0,consenso,"Sim restringe saídas temporárias, exige exame criminológico e amplia monitoração; Não mantém LEP atual. Endurecimento penal."
+Senado,6820,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6824,2.0,0.5,4.5,2.0,consenso,Sim constitucionaliza criminalização de posse de drogas para uso; Não mantém criminalização legal sem prisão. Punitivismo; restrição a autonomia individual.
+Senado,6825,2.0,0.5,4.5,2.0,consenso,Sim constitucionaliza criminalização de posse de drogas para uso; Não mantém criminalização legal sem prisão. Punitivismo; restrição a autonomia individual.
+Senado,6826,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6827,-1.0,0.0,0.0,0.0,desempate,"Sim recria seguro obrigatório de trânsito (SPVAT) para indenizar vítimas; Não mantém sem seguro. Proteção social incremental; obrigação compulsória limitada.; aut: Seguro obrigatório é obrigação econômica, sem efeito no regime de liberdades"
+Senado,6831,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6833,-2.0,0.0,-1.0,0.0,consenso,Sim cria mecanismos de proteção à população LGBT encarcerada; Não mantém ausência. Igualdade LGBT incremental; garantias a presos.
+Senado,6836,0.0,0.0,0.0,0.0,desempate,Programa Mover: incentivos setoriais à indústria automotiva com metas ambientais; distribuição mista: 0/0.; ed: Incentivos setoriais com metas ambientais e conteúdo local: distribuição mista
+Senado,6848,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6850,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6868,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6869,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6870,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6873,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Senado,6874,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Senado,6882,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6903,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6904,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6905,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6906,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6908,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6910,2.0,1.0,0.0,0.0,consenso,"Sim restringe crescimento de despesas obrigatórias (salário mínimo, benefícios) dentro do arcabouço; Não mantém arcabouço sem os cortes. Ajuste fiscal com efeito distributivo."
+Senado,6914,2.0,0.0,0.0,0.0,consenso,Sim restringe abono salarial e outras despesas sociais (PEC do corte de gastos); Não mantém regras atuais. Ajuste fiscal com efeito regressivo limitado.
+Senado,6916,2.0,0.0,0.0,0.0,consenso,Sim restringe abono salarial e outras despesas sociais (PEC do corte de gastos); Não mantém regras atuais. Ajuste fiscal com efeito regressivo limitado.
+Senado,6917,1.5,0.0,0.0,0.0,consenso,Sim restringe regras de BPC/Bolsa Família no pacote de corte de gastos; Não mantém regras atuais. Ajuste fiscal com perda distributiva limitada.
+Senado,6919,-1.0,0.0,0.0,0.0,consenso,Sim inclui Pantanal sul-mato-grossense como patrimônio nacional; Não mantém rol atual. Proteção ambiental incremental.
+Senado,6920,-1.0,0.0,0.0,0.0,consenso,Sim inclui Pantanal sul-mato-grossense como patrimônio nacional; Não mantém rol atual. Proteção ambiental incremental.
+Senado,6922,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6925,-1.0,0.0,0.0,0.0,consenso,Sim inclui saneamento básico entre direitos sociais; Não mantém rol atual. Direito social incremental.
+Senado,6926,-1.0,0.0,0.0,0.0,consenso,Sim inclui saneamento básico entre direitos sociais; Não mantém rol atual. Direito social incremental.
+Senado,6927,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6928,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6929,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6935,4.0,0.0,0.0,0.0,consenso,"Sim aprova lei geral de licenciamento ambiental com autolicenciamento (LAC), dispensas e licença especial; Não mantém regime atual. Desregulação ambiental ampla."
+Senado,6936,0.0,0.0,1.0,0.0,consenso,Sim inclui guardas municipais e agentes de trânsito na segurança pública; Não mantém rol atual. Ampliação limitada de aparato policial.
+Senado,6938,0.0,0.0,1.0,0.0,consenso,Sim inclui guardas municipais e agentes de trânsito na segurança pública; Não mantém rol atual. Ampliação limitada de aparato policial.
+Senado,6939,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6951,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Senado,6955,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6964,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,6965,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7006,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7007,0.0,0.0,0.0,0.0,consenso,"Regras eleitorais/partidárias, prerrogativas, anistia ou blindagem de parlamentares/partidos: 0/0 conforme codebook (tratado no autobenefício)."
+Senado,7009,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7011,-1.5,0.0,0.0,0.0,consenso,Sim amplia tarifa social de energia e abre mercado livre; Não mantém regras atuais. Predomina inclusão social incremental.
+Senado,7012,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7015,-1.0,0.0,0.0,0.0,consenso,Sim institui Sistema Nacional de Educação com cooperação federativa; Não mantém ausência. Expansão incremental de serviço público.
+Senado,7016,0.0,0.0,0.0,0.0,consenso,Criação/transformação de cargos ou carreiras públicas; efeito administrativo: 0/0.
+Senado,7029,-1.0,0.0,0.0,0.0,consenso,Sim amplia proteção e aposentadoria diferenciada a agentes comunitários de saúde; Não mantém regras atuais. Direito trabalhista parcial.
+Senado,7032,5.0,-1.0,2.0,0.0,desempate,Sim fixa marco temporal e restringe demarcação/abre terras indígenas a exploração e intervenções sem consulta; Não mantém regime constitucional atual. Terra/direitos; coerção sobre povos indígenas.; aut: Intervenções em terras indígenas sem consulta: coerção limitada sobre minoria
+Senado,7033,5.0,-1.0,2.0,0.0,desempate,Sim fixa marco temporal e restringe demarcação/abre terras indígenas a exploração e intervenções sem consulta; Não mantém regime constitucional atual. Terra/direitos; coerção sobre povos indígenas.; aut: Intervenções em terras indígenas sem consulta: coerção limitada sobre minoria
+Senado,7038,0.0,0.0,0.0,0.0,desempate,"Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.; ed: Exceção a restrição de reajustes de servidores: efeito administrativo, sem conteúdo distributivo claro"
+Senado,7039,0.0,0.0,0.0,0.0,consenso,Inclusão de polícias científicas (perícia) entre órgãos de segurança; organizacional: 0/0.
+Senado,7040,0.0,0.0,0.0,0.0,consenso,Inclusão de polícias científicas (perícia) entre órgãos de segurança; organizacional: 0/0.
+Senado,7041,,,2.0,0.0,consenso,Sim reduz/extingue punição de condenados por atos contra o Estado Democrático (8/1); Não mantém penas. Sem conteúdo distributivo identificável; enfraquece proteção da ordem democrática.
+Senado,7042,-1.5,0.0,0.0,0.0,consenso,Sim reduz em ao menos 10% benefícios tributários federais; Não mantém benefícios. Reduz privilégios tributários.
+Senado,7048,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7049,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Desoneração setorial a empresas: leve direita, não liberalização geral"
+Senado,7051,,,0.0,0.0,desempate,"Informação insuficiente: ementa genérica sobre benefícios tributários/despesas, efeito concreto das alternativas não identificável. Autoridade inaplicável.; aut: Regras de benefícios tributários: sem efeito no regime de liberdades"
+Senado,7052,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7091,,,0.0,0.0,desempate,"Informação insuficiente: ementa genérica sobre benefícios tributários/despesas, efeito concreto das alternativas não identificável. Autoridade inaplicável.; aut: Alteração fiscal: sem efeito no regime de liberdades"
+Senado,7092,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7094,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7095,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7096,-1.0,0.0,0.0,0.0,consenso,Sim amplia proteção e aposentadoria diferenciada a agentes comunitários de saúde; Não mantém regras atuais. Direito trabalhista parcial.
+Senado,7097,-1.0,0.0,0.0,0.0,consenso,Sim amplia proteção e aposentadoria diferenciada a agentes comunitários de saúde; Não mantém regras atuais. Direito trabalhista parcial.
+Senado,7098,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7101,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7102,0.0,0.0,0.0,0.0,consenso,Rotina fiscal/administrativa/federativa sem efeito identificável nos eixos: 0/0.
+Senado,7105,1.0,0.0,0.0,0.0,desempate,"Benefício/subsídio tributário setorial ou renegociação de dívidas; distribuição mista, não equivale a liberalização geral: 0/0.; ed: Desoneração setorial a empresas: leve direita, não liberalização geral"
