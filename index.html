@@ -382,19 +382,24 @@ function metodologia(pts) {
     </ul>
     <p>Duas classificações independentes concordam quando a proposta tem o mesmo sinal e as posições de cada alternativa
       diferem no máximo 3 pontos: usam-se as médias. Divergências exigem desempate; informação insuficiente fica vazia.</p>
-    <p>A posição parlamentar minimiza votos incompatíveis numa grade de 0,1. Cada voto exige o lado da alternativa escolhida
-      em relação ao ponto médio entre proposta e status quo. Sim escolhe a proposta; Não/Obstrução escolhem a alternativa.
-      Abstenções e ausências não contam. Exigem-se ${DATA.min_votos_eixo} votos informativos por eixo.</p>
-    <p>Empates usam o meio do intervalo ótimo. Se ele chega à ponta da escala, usamos o corte respeitado mais extremo ±0,5,
-      limitado à alternativa apoiada e ao intervalo ótimo. Intervalos separados são resolvidos pela largura e proximidade do centro,
-      conforme o livro de regras. Votar sempre em propostas moderadas não leva automaticamente aos extremos.</p>
-    <p>Voto com a maioria pesa 1; com a minoria, até ${DATA.max_bonus_minoria}×.
-      Consensos entram no cálculo e os lados não recebem pesos totais iguais. O resultado pode ser assimétrico.</p>
+    <p><b>Ordem pelos votos.</b> Cada voto conta a direção da pauta (proposta − status quo) com sinal +1 no Sim e −1 no
+      Não/Obstrução; abstenções e ausências não contam. As pautas de cada sentido recebem o mesmo peso total, de modo que quem
+      vota "Sim" em tudo fica no centro, e votações com ${Math.round(DATA.limite_consenso.ed * 100)}% ou mais de votos iguais ficam
+      fora (não diferenciam ninguém). Voto com a maioria pesa 1; com a minoria, até ${DATA.max_bonus_minoria}×.
+      Exigem-se ${DATA.min_votos_eixo} votos por eixo.</p>
+    <p><b>Escala pela pesquisa com especialistas.</b> No eixo esquerda × direita, a mediana de cada partido é levada à posição
+      do partido na pesquisa de Bolognesi, Ribeiro e Codato (2023, coletada em 2018), convertida para −10..+10, e cada
+      parlamentar é interpolado entre os partidos vizinhos. Os votos definem a ordem e a distância dentro de cada partido; a
+      pesquisa define onde ficam as faixas. Partidos sem nota própria: <b>PL usa a nota do PSL</b> (partido de Bolsonaro em 2018),
+      União a média de DEM e PSL, PRD a média de PTB e Patriota. O eixo de autoridade não tem calibração externa.</p>
+    <p><b>Marcador de democracia.</b> Seguindo Mudde, anistiar ou reduzir a punição dos atos de 8 de janeiro conta como pauta de
+      extrema-direita (proposta em +8) no eixo esquerda × direita.</p>
     <p>São 24 subquadrantes: seis faixas em esquerda × direita (cortes −7, −4, 0, +4, +7) e quatro em autoridade
       (−5, 0, +5). Os cortes de esquerda × direita adaptam o survey de Bolognesi, Ribeiro e Codato; o centro foi dividido
       nas duas faixas centrais. “Extrema” aqui é faixa espacial, não diagnóstico de rejeição da democracia no sentido de Mudde.</p>
     <p><b>Limites:</b> dependência da classificação das alternativas e da agenda observada; pouca evidência amplia a incerteza.
-      Pautas de autoridade: ${n('Câmara', 'aut')} na Câmara e ${n('Senado', 'aut')} no Senado.</p>
+      Pautas de autoridade: ${n('Câmara', 'aut')} na Câmara e ${n('Senado', 'aut')} no Senado, quase todas punitivas;
+      por isso esse eixo tende aos extremos (±10) e deve ser lido como indicativo.</p>
     <p>Arquivos: <a href="metodologia/codebook.md">livro de regras v3</a> ·
       <a href="metodologia/referencias.md">referências e posições partidárias dos estudos</a> ·
       ${DATA.versao_metodologia === 3 ? '<a href="metodologia/classificacao.csv">classificação final</a> ·' : 'classificação v3 pendente ·'}

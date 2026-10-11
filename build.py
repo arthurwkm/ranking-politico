@@ -43,6 +43,16 @@ CLASSIFICACAO = "metodologia/classificacao.csv"
 CANDIDATAS = "metodologia/votacoes_candidatas.csv"
 # Votar com a minoria vale mais: peso 1 com a maioria, crescendo até MAX_BONUS_MINORIA quando quase ninguém votou junto.
 MAX_BONUS_MINORIA = 3
+# Votações com >= 90% de votos iguais ficam fora: não diferenciam ninguém e, com os pesos equilibrados por sentido,
+# os consensos de um lado só (ex.: as poucas pautas libertárias, aprovadas por 464 × 3) puxariam todos para lá.
+LIMITE_CONSENSO = {"ed": 0.9, "aut": 0.9}
+# Calibração da escala esquerda × direita: os votos dão a ORDEM; a posição absoluta vem da pesquisa com especialistas
+# de Bolognesi, Ribeiro & Codato (2023, survey de 2018), convertida de 0..10 para −10..+10 (x = 2s − 10).
+# Partidos atuais sem nota própria no survey: PL usa a do PSL (partido de Bolsonaro em 2018; decisão do usuário),
+# União = média de DEM e PSL (fusão), PRD = média de PTB e Patriota (fusão), Republicanos = PRB, Cidadania = PPS.
+ANCORAS_ED = {"PSOL": -7.44, "PCdoB": -6.16, "PT": -4.06, "PDT": -2.16, "PSB": -1.9, "REDE": -0.46, "Cidadania": -0.16,
+              "PV": 0.58, "AVANTE": 2.64, "SOLIDARIEDADE": 3.0, "MDB": 4.02, "PSD": 4.18, "PSDB": 4.22, "PODE": 4.48,
+              "PRD": 4.65, "REPUBLICANOS": 5.56, "PL": 6.22, "NOVO": 6.26, "PP": 6.4, "UNIÃO": 6.68}
 MIN_VOTOS_EIXO = 5  # abaixo disso o eixo fica "dados insuficientes"
 VOTO_VALOR = {"Sim": 1, "Não": -1, "Obstrução": -1}  # obstruir é tática para derrubar o texto
 ED_NOMES = ("Esquerda", "Centro-esquerda", "Centro-direita", "Direita")
@@ -80,6 +90,26 @@ def norm(s):
     return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().upper().strip()
 
 
+# Marcador de democracia (Mudde, The Far Right Today): o que separa extrema de radical é a relação com a democracia.
+# Anistiar/abrandar a punição de ataques à ordem democrática (8 de janeiro) recebe posição de extrema-direita no eixo
+# esquerda × direita; os classificadores deixaram esse eixo vazio. A PEC da Blindagem não entra aqui: teve apoio de
+# vários partidos e já é penalizada como autobenefício.
+DEMOCRACIA = {  # (casa, id) -> (ed_p, ed_q, motivo)
+    ("Câmara", "2358548-89"): (8, 0, "anistia a participantes dos atos de 8 de janeiro contra a ordem democrática"),
+    ("Senado", "7041"): (8, 0, "reduz penas de condenados pelos atos de 8 de janeiro contra a ordem democrática"),
+}
+
+
+def classificacao_final(r):
+    """Posições da pauta com o marcador de democracia aplicado, e a justificativa correspondente."""
+    valores, just = posicoes_pauta(r), r["justificativa"]
+    if (r["casa"], r["id"]) in DEMOCRACIA:
+        p, q, motivo = DEMOCRACIA[(r["casa"], r["id"])]
+        valores.update(ed_p=p, ed_q=q)
+        just = f"{just} Marcador de democracia: {motivo}."
+    return valores, just
+
+
 def posicoes_pauta(r):
     """Lê os pares v3; vazio é desconhecido, zero é uma posição válida."""
     out = {}
@@ -96,16 +126,23 @@ def posicoes_pauta(r):
 
 
 def carregar_classificacao(casa):
-    """Votações v3 com alternativas distintas; sem equilibrar sinais ou excluir consenso."""
+    """Votações v3 com alternativas distintas, com pesos w_ed/w_aut (equilíbrio por sentido e corte de consenso)."""
     cand = {(r["casa"], r["id"]): r for r in csv.DictReader(open(CANDIDATAS, encoding="utf-8"))}
     out = {}
     for r in csv.DictReader(open(CLASSIFICACAO, encoding="utf-8")):
-        valores = posicoes_pauta(r)
+        valores, just = classificacao_final(r)
         if r["casa"] == casa and any(valores[e + "_p"] != valores[e + "_q"] for e in ("ed", "aut")):
             c = cand[(r["casa"], r["id"])]
             out[r["id"]] = {"data": c["data"], "proposicao": c["proposicao"], "descricao": c["descricao"],
-                            **valores, "justificativa": r["justificativa"],
-                            "sim": int(c["sim"]), "nao": int(c["nao"])}
+                            **valores, "justificativa": just,
+                            "sim": int(c["sim"]), "nao": int(c["nao"]), "pct_maioria": float(c["pct_maioria"])}
+    for e in ("ed", "aut"):
+        # d = p − q: quanto e para que lado o "Sim" move em relação ao status quo
+        conta = [i for i in out.values() if i[e + "_p"] is not None and i[e + "_p"] != i[e + "_q"]
+                 and i["pct_maioria"] < LIMITE_CONSENSO[e]]
+        soma = {s: sum(abs(i[e + "_p"] - i[e + "_q"]) for i in conta if (i[e + "_p"] > i[e + "_q"]) == s) for s in (True, False)}
+        for i in out.values():
+            i["w_" + e] = 1 / soma[i[e + "_p"] > i[e + "_q"]] if i in conta else 0
     return out
 
 
@@ -128,54 +165,60 @@ def nome_ed(x):
 
 
 def posicao(votos):
-    """Classificação espacial por eixo, em grade de 0,1, com cortes fixos (p+q)/2.
+    """Posição relativa pelos votos, Σ w·m·d·v / Σ w·m·|d|, em −10..+10 (antes da calibração).
 
-    Minimiza violações ponderadas apenas por bonus_minoria: sem equilíbrio por sinal
-    nem exclusão de consenso. Não/Obstrução escolhem q; outros votos não contam.
-    No corte, a indiferença viola ambos os lados (não explica uma escolha estrita).
-    Empates: meio do intervalo ótimo; se houver intervalos separados, maior largura,
-    depois centro mais próximo de zero, depois o da esquerda. Nunca atravessa uma
-    região não ótima. Na ponta, usa o corte respeitado mais extremo ±0,5, limitado
-    à alternativa apoiada e ao intervalo ótimo. Arredonda para a grade mais próxima.
+    d = p − q da pauta; v = +1 Sim, −1 Não/Obstrução; m = bonus_minoria(); w equilibra os dois sentidos do eixo
+    (quem vota "Sim" em tudo fica no centro) e é 0 nas pautas fora do cálculo (consenso no eixo esquerda × direita).
     """
     res = {}
     for e in ("ed", "aut"):
-        vs = []
-        for v in votos:
-            p, q = v[e + "_p"], v[e + "_q"]
-            if p is None or q is None or p == q or v["voto"] not in VOTO_VALOR:
-                continue
-            lado = (1 if p > q else -1) * VOTO_VALOR[v["voto"]]
-            vs.append(((p + q) / 2, lado, round(100 * bonus_minoria(v)), p if v["voto"] == "Sim" else q))
-        res[e], res["n_" + e] = None, len(vs)
-        if len(vs) < MIN_VOTOS_EIXO:
-            continue
-        perdas = [sum(w for m, lado, w, _ in vs if (i / 10 - m) * lado <= 1e-9) for i in range(-100, 101)]
-        minimo = min(perdas)
-        otimos = [i - 100 for i, perda in enumerate(perdas) if perda == minimo]
-        intervalos = []
-        for i in otimos:
-            if not intervalos or i > intervalos[-1][1] + 1:
-                intervalos.append([i, i])
-            else:
-                intervalos[-1][1] = i
-        lo, hi = min(intervalos, key=lambda par: (par[0] - par[1], abs(sum(par)), par[0]))
-        alvo = (lo + hi) / 20
-        if lo == -100:
-            cortes = [(m, alternativa) for m, lado, _, alternativa in vs if lado < 0 and lo / 10 < m]
-            if cortes:
-                m, alternativa = min(cortes)
-                alvo = max(m - 0.5, alternativa)
-        elif hi == 100:
-            cortes = [(m, alternativa) for m, lado, _, alternativa in vs if lado > 0 and hi / 10 > m]
-            if cortes:
-                m, alternativa = max(cortes)
-                alvo = min(m + 0.5, alternativa)
-        res[e] = min(range(lo, hi + 1), key=lambda i: (round(abs(i / 10 - alvo), 10), abs(i), i)) / 10
-    # sem votos suficientes em autoridade (ex.: Senado), o nome usa só o eixo esquerda × direita
-    res["posicao_nome"] = ("Dados insuficientes" if res["ed"] is None else nome_ed(res["ed"]) if res["aut"] is None
-                           else f"{nome_ed(res['ed'])} {AUT_NOMES[faixa(res['aut'])]}")
+        vs = [((v[e + "_p"] - v[e + "_q"]) * v.get("w_" + e, 1) * bonus_minoria(v), VOTO_VALOR[v["voto"]])
+              for v in votos if v[e + "_p"] is not None and v[e + "_p"] != v[e + "_q"] and v.get("w_" + e, 1)
+              and v["voto"] in VOTO_VALOR]
+        res[e] = round(10 * sum(d * x for d, x in vs) / sum(abs(d) for d, _ in vs), 1) if len(vs) >= MIN_VOTOS_EIXO else None
+        res["n_" + e] = len(vs)
     return res
+
+
+def nomear(p):
+    p["posicao_nome"] = ("Dados insuficientes" if p["ed"] is None else nome_ed(p["ed"]) if p["aut"] is None
+                         else f"{nome_ed(p['ed'])} {AUT_NOMES[faixa(p['aut'])]}")
+
+
+def calibrar(politicos):
+    """Leva a pontuação relativa de esquerda × direita à escala da pesquisa com especialistas.
+
+    Pontos de apoio: (mediana da pontuação do partido, posição do partido em ANCORAS_ED), para partidos com >= 3
+    parlamentares. As posições são ajustadas para crescer junto com a pontuação (regressão isotônica, peso = tamanho)
+    e cada parlamentar é interpolado linearmente entre os pontos vizinhos; fora das pontas, segue a inclinação do
+    último trecho. Preserva a ordem dada pelos votos; a pesquisa define só a escala.
+    """
+    por_partido = defaultdict(list)
+    for p in politicos:
+        if p["ed"] is not None and p["partido"] in ANCORAS_ED:
+            por_partido[p["partido"]].append(p["ed"])
+    pts = sorted((sorted(v)[len(v) // 2], ANCORAS_ED[k], len(v)) for k, v in por_partido.items() if len(v) >= 3)
+    blocos = []  # regressão isotônica (pool adjacent violators): [soma s·w, soma x·w, peso]
+    for s0, x, w in pts:
+        blocos.append([s0 * w, x * w, w])
+        while len(blocos) > 1 and blocos[-2][1] / blocos[-2][2] >= blocos[-1][1] / blocos[-1][2]:
+            b = blocos.pop()
+            blocos[-1] = [blocos[-1][i] + b[i] for i in range(3)]
+    apoio = [(sw / w, xw / w) for sw, xw, w in blocos]
+
+    def mapa(s0):
+        if len(apoio) < 2:
+            return s0
+        i = max(1, min(len(apoio) - 1, next((k for k, (sk, _) in enumerate(apoio) if sk >= s0), len(apoio) - 1)))
+        (s1, x1), (s2, x2) = apoio[i - 1], apoio[i]
+        return x1 + (x2 - x1) * (s0 - s1) / (s2 - s1) if s2 != s1 else x1
+
+    for p in politicos:
+        p["ed_votos"] = p["ed"]
+        if p["ed"] is not None:
+            p["ed"] = round(max(-10, min(10, mapa(p["ed"]))), 1)
+        nomear(p)
+    return [[round(sk, 2), round(xk, 2)] for sk, xk in apoio]
 
 
 def resumo_gastos(gastos):
@@ -371,11 +414,13 @@ def escrever_pautas():
     pautas = []
     for c in csv.DictReader(open(CANDIDATAS, encoding="utf-8")):
         r = cl[(c["casa"], c["id"])]
+        valores, just = classificacao_final(r)
         url = (f"https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao={c['id_proposicao']}" if c["casa"] == "Câmara"
                else f"https://www25.senado.leg.br/web/atividade/materias/-/materia/{c['id_proposicao']}")
         pautas.append({k: c[k] for k in ("casa", "id", "data", "proposicao", "ementa", "descricao")}
-                      | {"sim": int(c["sim"]), "nao": int(c["nao"]), **posicoes_pauta(r),
-                         "origem": r["origem"], "justificativa": r["justificativa"], "url": url})
+                      | {"sim": int(c["sim"]), "nao": int(c["nao"]), **valores,
+                         "origem": "marcador de democracia" if (c["casa"], c["id"]) in DEMOCRACIA else r["origem"],
+                         "justificativa": just, "url": url})
     auto = ([{"casa": "Câmara", "pauta": p, "url": f"{CAMARA_API}/votacoes/{i}"} for i, p in AUTOBENEFICIO_CAMARA.items()]
             + [{"casa": "Senado", "pauta": p, "data": d, "url": f"{SENADO}/votacao?dataInicio={d}&dataFim={d}"}
                for d, p in AUTOBENEFICIO_SENADO.values()])
@@ -391,30 +436,20 @@ def _teste():
     assert [p["nota"] for p in r] == [90.0, 80.0, 40.0, None], r  # empate em proposições = percentil 0.5
     assert r[0]["posicao"] == 1 and r[3]["posicao"] is None
     v = lambda p, q, voto="Sim", **kw: dict(ed_p=p, ed_q=q, aut_p=None, aut_q=None, voto=voto, **kw)
-    moderados = [v(-4, 0)] * 5
-    assert posicao(moderados)["ed"] == -2.5
-    assert posicao(moderados)["posicao_nome"] == "Centro-esquerda"
-    assert posicao([v(-10, -6)] * 5)["ed"] == -8.5
-    assert posicao([v(10, 6)] * 5)["ed"] == 8.5
-    assert posicao([v(-4, 0, "Não")] * 5)["ed"] == -1.5
-    assert posicao([v(-4, 0, "Obstrução")] * 5)["ed"] == -1.5
-    assert posicao(moderados[:4])["ed"] is None
+    assert posicao([v(-4, 0)] * 5)["ed"] == -10 and posicao([v(-4, 0, "Não")] * 5)["ed"] == 10
+    assert posicao([v(-4, 0)] * 4)["ed"] is None
     assert posicao([v(0, 0), v(None, None), v(-4, 0, "Abstenção")] * 5)["n_ed"] == 0
-    # Intervalo limitado por dois cortes: meio −1, sem atingir as pontas.
-    assert posicao([v(-4, 4)] * 3 + [v(0, -4)] * 3)["ed"] == -1
-    # Dois intervalos ótimos separados: não escolher o corte 0, que viola ambos.
-    assert posicao([v(-2, 2)] * 3 + [v(2, -2)] * 3)["ed"] == -0.5
-    # Dois votos minoritários superam três majoritários no sentido oposto.
-    maioria = [v(2, -2, sim=400, nao=10)] * 3
-    minoria = [v(2, -2, "Não", sim=400, nao=10)] * 2
-    assert posicao(maioria + [v(2, -2, "Não")] * 2)["ed"] == 0.5
-    assert posicao(maioria + minoria)["ed"] == -0.5
-    assert bonus_minoria(maioria[0]) == 1 and bonus_minoria(minoria[0]) == 2.9
-    # Margem não ultrapassa alternativas muito próximas nem a escala.
-    assert posicao([v(-2, -1.8)] * 5)["ed"] == -2
-    assert posicao([v(10, 9.8)] * 5)["ed"] == 10
-    aut = [dict(v(-4, 0), aut_p=8, aut_q=4)] * 5
-    assert posicao(aut)["posicao_nome"] == "Centro-esquerda autoritária"
+    # voto minoritário pesa mais: 1 contra a maioria (m≈2,9) vs 4 com a maioria no sentido oposto
+    vm = [v(2, 0, sim=400, nao=10)] * 4 + [v(2, 0, "Não", sim=400, nao=10)]
+    assert posicao(vm)["ed"] == round(10 * (4 - 2.9) / (4 + 2.9), 1)
+    # pesos equilibrados: "Sim" em tudo = centro, mesmo com mais pautas de um lado
+    tudo = [dict(v(2, 0), w_ed=1 / 6)] * 3 + [dict(v(-2, 0), w_ed=1 / 4)] * 2
+    assert posicao(tudo)["ed"] == 0
+    # calibração: mantém a ordem e leva as medianas dos partidos às âncoras
+    ps = [{"partido": k, "ed": s0, "aut": None} for k, s0 in (("PT", -8), ("PSOL", -9), ("PL", 7), ("MDB", 1))] * 3
+    calibrar(ps)
+    assert ps[1]["ed"] < ps[0]["ed"] < ps[3]["ed"] < ps[2]["ed"], ps
+    assert ps[2]["posicao_nome"] in ("Direita", "Extrema-direita"), ps
     assert [nome_ed(x) for x in (-7, -6.9, -4, -3.9, 0, 3.9, 4, 6.9, 7)] == [
         "Extrema-esquerda", "Esquerda", "Esquerda", "Centro-esquerda", "Centro-direita",
         "Centro-direita", "Direita", "Direita", "Extrema-direita"]
@@ -436,9 +471,10 @@ if __name__ == "__main__":
     cargos = {
         "Senador": pontuar(senadores()),
         "Deputado Federal": pontuar(deputados_federais()),
-        # ponytail: deputados estaduais e vereadores não têm fonte oficial unificada;
-        # adicionar uma função por casa (ex.: ALESP, Câmara de SP) quando escolher quais cobrir.
     }
+    # ponytail: deputados estaduais e vereadores não têm fonte oficial unificada;
+    # adicionar uma função por casa (ex.: ALESP, Câmara de SP) quando escolher quais cobrir.
+    calibracao = {c: calibrar(ps) for c, ps in cargos.items()}
     categorias = {c: defaultdict(float) for c in cargos}
     os.makedirs("detalhes", exist_ok=True)
     for cargo, ps in cargos.items():
@@ -452,6 +488,7 @@ if __name__ == "__main__":
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump({"ano": ANO, "pesos": PESOS, "penalidade_autobeneficio": PENALIDADE_AUTOBENEFICIO,
                    "min_votos_eixo": MIN_VOTOS_EIXO, "versao_metodologia": 3, "max_bonus_minoria": MAX_BONUS_MINORIA,
+                   "limite_consenso": LIMITE_CONSENSO, "ancoras_ed": ANCORAS_ED, "calibracao": calibracao,
                    "categorias_gastos": {c: sorted(([k, round(v, 2)] for k, v in cs.items()), key=lambda x: -x[1])
                                          for c, cs in categorias.items()}, "gerado_em": datetime.now().isoformat(timespec="minutes"),
                    "cargos": cargos}, f, ensure_ascii=False)
